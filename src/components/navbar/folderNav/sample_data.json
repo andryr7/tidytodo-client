@@ -1,0 +1,20 @@
+[
+	{
+		"id": "19998d2a-32cb-4a34-be27-ad5103c38dbe",
+		"text": "test child",
+		"parent": "d0051ae1-ab75-4fbd-a165-0861f9ac5fb7",
+		"droppable": true,
+		"data": {
+			"icon": "default"
+		}
+	},
+	{
+		"id": "d0051ae1-ab75-4fbd-a165-0861f9ac5fb7",
+		"text": "testtttt",
+		"parent": "root",
+		"droppable": true,
+		"data": {
+			"icon": "default"
+		}
+	}
+]
