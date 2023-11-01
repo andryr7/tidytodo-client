@@ -132,11 +132,7 @@ export function FolderExplorer() {
             data-autofocus
             ref={newElementNameFieldRef}
           />
-          <Button
-            fullWidth
-            onClick={() => handleSubmitFolderRename(newElementType)}
-            mt="md"
-          >
+          <Button fullWidth onClick={() => handleSubmitFolderRename(newElementType)} mt="md">
             Create
           </Button>
         </>
@@ -210,21 +206,14 @@ export function FolderExplorer() {
         <Stack justify="space-between" style={{ height: '100%' }}>
           <Stack>
             <Title order={2}>{folderContent.name}</Title>
-            {elements.length === 0 && (
-              <MessageCard message="This folder is empty" />
-            )}
+            {elements.length === 0 && <MessageCard message="This folder is empty" />}
             <div style={gridStyle}>
               {state.currentFolderId !== 'root' && <ParentFolderCard />}
               {elements.length !== 0 && elements}
             </div>
           </Stack>
           <Group position="right">
-            <Tooltip
-              label="Create a folder"
-              withArrow
-              position="bottom"
-              openDelay={500}
-            >
+            <Tooltip label="Create a folder" withArrow position="bottom" openDelay={500}>
               <ActionIcon
                 color="blue"
                 size="60px"
@@ -235,12 +224,7 @@ export function FolderExplorer() {
                 <IconFolder size={30} />+
               </ActionIcon>
             </Tooltip>
-            <Tooltip
-              label="Create a note"
-              withArrow
-              position="bottom"
-              openDelay={500}
-            >
+            <Tooltip label="Create a note" withArrow position="bottom" openDelay={500}>
               <ActionIcon
                 color="blue"
                 size="60px"
@@ -251,12 +235,7 @@ export function FolderExplorer() {
                 <IconNotes size={30} />+
               </ActionIcon>
             </Tooltip>
-            <Tooltip
-              label="Create a list"
-              withArrow
-              position="bottom"
-              openDelay={500}
-            >
+            <Tooltip label="Create a list" withArrow position="bottom" openDelay={500}>
               <ActionIcon
                 color="blue"
                 size="60px"
@@ -285,9 +264,7 @@ export function FolderExplorer() {
     <>
       {headerBreadCrumbs && largeDevice && <ElementsGrid />}
 
-      {headerBreadCrumbs && !largeDevice && !elementTabIsOpened && (
-        <ElementsGrid />
-      )}
+      {headerBreadCrumbs && !largeDevice && !elementTabIsOpened && <ElementsGrid />}
 
       {!headerBreadCrumbs && largeDevice && (
         <Stack>
@@ -296,9 +273,7 @@ export function FolderExplorer() {
         </Stack>
       )}
 
-      {!headerBreadCrumbs && !largeDevice && elementTabIsOpened && (
-        <BreadCrumbsElement />
-      )}
+      {!headerBreadCrumbs && !largeDevice && elementTabIsOpened && <BreadCrumbsElement />}
 
       {!headerBreadCrumbs && !largeDevice && !elementTabIsOpened && (
         <Stack>

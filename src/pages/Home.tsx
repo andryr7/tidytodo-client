@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppShell, useMantineTheme, Loader, SimpleGrid } from '@mantine/core';
+import { AppShell, Loader, SimpleGrid } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { axiosApiInstance } from '@data/api/axiosInstance';
@@ -17,11 +17,9 @@ import { FolderExplorer } from '@components/main/FolderExplorer/FolderExplorer';
 import { NoteViewer } from '@components/main/NoteViewer/NoteViewer';
 import { ListViewer } from '@components/main/ListViewer/ListViewer';
 import { UserSettings } from '@components/main/UserSettings/UserSettings';
-import { About } from '@components/main/About/About';
 
 export default function Home() {
   const navigate = useNavigate();
-  const theme = useMantineTheme();
   const [navBarIsOpened, setNavBarIsOpened] = useState(false);
   const { state, dispatch } = useContext(AppContext);
   const queryClient = useQueryClient();
@@ -48,7 +46,6 @@ export default function Home() {
     }
   }, [dispatch, navigate, state.isLoggedIn]);
 
-  //TODO Import ?
   async function onLogout() {
     await logout();
     queryClient.removeQueries(['userInfo']);
@@ -58,7 +55,7 @@ export default function Home() {
 
   return (
     <>
-      {!state.isLoggedIn && (
+      {!state.isLoggedIn ? (
         <div
           style={{
             height: '100vh',
@@ -70,12 +67,15 @@ export default function Home() {
         >
           <Loader />
         </div>
-      )}
-      {state.isLoggedIn && (
+      ) : (
         <AppShell
           styles={{
             main: {
-              background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0]
+              // background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0]
+              backgroundColor: '#141517',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.5'%3E%3Cpolygon fill='%23172d40' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%231a446a' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%231c5c93' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%231f73bd' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%23228BE6' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E")`,
+              backgroundAttachment: 'fixed',
+              backgroundSize: 'cover'
             }
           }}
           navbarOffsetBreakpoint="sm"
@@ -107,14 +107,13 @@ export default function Home() {
             )}
 
             {/* Element viewer/Editor */}
-            {state.currentElementType === 'note' &&
-              state.appMode !== 'userSettings' &&
-              state.appMode !== 'about' && <NoteViewer />}
-            {state.currentElementType === 'list' &&
-              state.appMode !== 'userSettings' &&
-              state.appMode !== 'about' && <ListViewer />}
+            {state.currentElementType === 'note' && state.appMode !== 'userSettings' && (
+              <NoteViewer />
+            )}
+            {state.currentElementType === 'list' && state.appMode !== 'userSettings' && (
+              <ListViewer />
+            )}
             {state.appMode === 'userSettings' && <UserSettings />}
-            {state.appMode === 'about' && <About />}
           </SimpleGrid>
         </AppShell>
       )}

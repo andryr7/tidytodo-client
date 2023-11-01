@@ -44,13 +44,7 @@ type ThemeAction = { type: ThemeActionKind; payload: null };
 type AppModeAction = {
   type: AppModeActionKind;
   payload: {
-    mode:
-      | 'searchResults'
-      | 'quickAccessNav'
-      | 'folderNav'
-      | 'tagNav'
-      | 'userSettings'
-      | 'about';
+    mode: 'searchResults' | 'quickAccessNav' | 'folderNav' | 'tagNav' | 'userSettings';
   };
 };
 type ElementTypeAction = {
@@ -95,10 +89,7 @@ export type ReducerAction =
   | SearchAction
   | LoginAction;
 
-export function reducer(
-  state: ReducedState,
-  action: ReducerAction
-): ReducedState {
+export function reducer(state: ReducedState, action: ReducerAction): ReducedState {
   const { type, payload } = action;
   switch (type) {
     case ThemeActionKind.TOGGLE_THEME:

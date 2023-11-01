@@ -1,4 +1,4 @@
-import { Header, Text, MediaQuery, Burger, useMantineTheme, Group, Title } from '@mantine/core';
+import { Header, MediaQuery, Burger, useMantineTheme, Group } from '@mantine/core';
 import { ThemeButton } from '@components/buttons/ThemeButton';
 import { UserButton } from '@components/buttons/UserButton';
 import { HeaderBreadCrumbs } from '@components/header/HeaderBreadCrumbs';
@@ -47,6 +47,3 @@ export function AppHeader({ navBarIsOpened, setNavBarIsOpened }: HeaderProps) {
     </Header>
   );
 }
-
-// theme.colors.yellow[4];
-// theme.colors.blue[6];

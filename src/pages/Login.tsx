@@ -9,8 +9,7 @@ import {
   Container,
   Group,
   Button,
-  Alert,
-  Center
+  Alert
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
@@ -18,7 +17,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { sendNewVerificationEmail } from '@auth/sendNewVerificationEmail';
-import classes from './page.module.css';
 
 interface FormValues {
   email: string;
@@ -84,88 +82,86 @@ export default function Login() {
   }
 
   return (
-    <div className={classes.page}>
-      <Container size={420} style={{ width: '100%' }}>
-        <Title
-          align="center"
-          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-        >
-          Welcome back !
-        </Title>
-        <Text color="dimmed" size="sm" align="center" mt={5}>
-          Do not have an account yet?{' '}
-          <Anchor size="sm" onClick={() => navigate('/signup')}>
-            Create account
-          </Anchor>
-        </Text>
+    <Container size={420} style={{ width: '100%' }}>
+      <Title
+        align="center"
+        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+      >
+        Welcome back !
+      </Title>
+      <Text color="dimmed" size="sm" align="center" mt={5}>
+        Do not have an account yet?{' '}
+        <Anchor size="sm" onClick={() => navigate('/signup')}>
+          Create account
+        </Anchor>
+      </Text>
 
-        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-          <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-            <TextInput
-              label="Email"
-              placeholder="you@email.com"
-              required
-              {...form.getInputProps('email')}
-            />
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              required
-              mt="md"
-              {...form.getInputProps('password')}
-            />
-            <Group position="apart" mt="lg">
-              <Checkbox label="Remember me" />
-              <Anchor size="sm" onClick={() => navigate('/resetpassword')}>
-                Forgot password?
-              </Anchor>
-            </Group>
-            <Button fullWidth mt="xl" type="submit">
-              Log in
-            </Button>
-            {badCredentials && (
+      <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          <TextInput
+            label="Email"
+            placeholder="you@email.com"
+            required
+            {...form.getInputProps('email')}
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Your password"
+            required
+            mt="md"
+            {...form.getInputProps('password')}
+          />
+          <Group position="apart" mt="lg">
+            <Checkbox label="Remember me" />
+            <Anchor size="sm" onClick={() => navigate('/resetpassword')}>
+              Forgot password?
+            </Anchor>
+          </Group>
+          <Button fullWidth mt="xl" type="submit">
+            Log in
+          </Button>
+          {badCredentials && (
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="Invalid credentials"
+              color="red"
+              withCloseButton
+              onClose={() => setBadCredentials(false)}
+            >
+              Email or password is incorrect
+            </Alert>
+          )}
+          {userIsNotVerified && (
+            <>
               <Alert
                 icon={<IconAlertCircle size="1rem" />}
-                title="Invalid credentials"
+                title="E-mail is not verified"
                 color="red"
                 withCloseButton
-                onClose={() => setBadCredentials(false)}
+                onClose={() => setUserIsNotVerified(false)}
               >
-                Email or password is incorrect
+                Your e-mail hasn't been verified yet. Please click the link you have received to
+                activate your account or
               </Alert>
-            )}
-            {userIsNotVerified && (
-              <>
-                <Alert
-                  icon={<IconAlertCircle size="1rem" />}
-                  title="E-mail is not verified"
-                  color="red"
-                  withCloseButton
-                  onClose={() => setUserIsNotVerified(false)}
-                >
-                  Your e-mail hasn't been verified yet. Please click the link you have received to
-                  activate your account or
-                </Alert>
-                <Button onClick={handleNewActivationEmailClick} fullWidth>
-                  Click here to receive a new activation e-mail
-                </Button>
-              </>
-              //TODO ADD NEW VERIFICATION EMAIL SENT NOTIFICATION
-            )}
-            {unknownError && (
-              <Alert
-                icon={<IconAlertCircle size="1rem" />}
-                title="Oh no"
-                color="red"
-                withCloseButton
-                onClose={() => setUnknownError(false)}
-              >
-                An unknown error has occured. I will be looking into it
-              </Alert>
-            )}
-          </Paper>
-        </form>
-      </Container>
-    </div>
+              <Button onClick={handleNewActivationEmailClick} fullWidth>
+                Click here to receive a new activation e-mail
+              </Button>
+            </>
+            //TODO ADD NEW VERIFICATION EMAIL SENT NOTIFICATION
+          )}
+          {unknownError && (
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="Oh no"
+              color="red"
+              withCloseButton
+              onClose={() => setUnknownError(false)}
+            >
+              An unknown error has occured. I will be looking into it
+            </Alert>
+          )}
+        </Paper>
+      </form>
+    </Container>
   );
 }
