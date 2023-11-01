@@ -1,21 +1,4 @@
-import { useState } from 'react';
-import {
-  AppShell,
-  Navbar,
-  Header,
-  Footer,
-  Aside,
-  Text,
-  MediaQuery,
-  Burger,
-  useMantineTheme,
-  Stack,
-  Anchor,
-  Button,
-  Card,
-  Title
-} from '@mantine/core';
-import { LogoButton } from '@components/buttons/LogoButton';
+import { Button } from '@mantine/core';
 import classes from './PageLayout.module.css';
 import { BigLogoButton } from '@components/buttons/BigLogoButton';
 import { openAboutModal } from '@components/main/About/AboutModal';
