@@ -19,7 +19,6 @@ import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import cssClasses from './page.module.css';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -62,53 +61,25 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className={cssClasses.page}>
-      <Container size={420} style={{ width: '100%' }}>
-        <Title className={classes.title} align="center">
-          Forgot your password?
-        </Title>
-        <Text c="dimmed" fz="sm" ta="center">
-          Enter your email to get a reset link
-        </Text>
+    <Container size={420} style={{ width: '100%' }}>
+      <Title className={classes.title} align="center">
+        Forgot your password?
+      </Title>
+      <Text c="dimmed" fz="sm" ta="center">
+        Enter your email to get a reset link
+      </Text>
 
-        <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-          {!passwordWasAsked && (
-            <>
-              <TextInput
-                label="Your email"
-                placeholder="you@email.com"
-                required
-                value={email}
-                onChange={setEmail}
-              />
-              <Group position="apart" mt="lg" className={classes.controls}>
-                <Anchor
-                  color="dimmed"
-                  size="sm"
-                  className={classes.control}
-                  onClick={() => navigate('/login')}
-                >
-                  <Center inline>
-                    <IconArrowLeft size={rem(12)} stroke={1.5} />
-                    <Box ml={5}>Back to the login page</Box>
-                  </Center>
-                </Anchor>
-                <Button className={classes.control} onClick={handleAskPasswordClick}>
-                  Reset password
-                </Button>
-              </Group>
-            </>
-          )}
-          {passwordWasAsked && (
-            <Stack>
-              <Alert
-                icon={<IconAlertCircle size="1rem" />}
-                title="Reset password email sent"
-                color="green"
-              >
-                If an account linked to this adress exists, an e-mail has been sent to reset its
-                password.
-              </Alert>
+      <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+        {!passwordWasAsked && (
+          <>
+            <TextInput
+              label="Your email"
+              placeholder="you@email.com"
+              required
+              value={email}
+              onChange={setEmail}
+            />
+            <Group position="apart" mt="lg" className={classes.controls}>
               <Anchor
                 color="dimmed"
                 size="sm"
@@ -120,10 +91,36 @@ export default function ResetPassword() {
                   <Box ml={5}>Back to the login page</Box>
                 </Center>
               </Anchor>
-            </Stack>
-          )}
-        </Paper>
-      </Container>
-    </div>
+              <Button className={classes.control} onClick={handleAskPasswordClick}>
+                Reset password
+              </Button>
+            </Group>
+          </>
+        )}
+        {passwordWasAsked && (
+          <Stack>
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="Reset password email sent"
+              color="green"
+            >
+              If an account linked to this adress exists, an e-mail has been sent to reset its
+              password.
+            </Alert>
+            <Anchor
+              color="dimmed"
+              size="sm"
+              className={classes.control}
+              onClick={() => navigate('/login')}
+            >
+              <Center inline>
+                <IconArrowLeft size={rem(12)} stroke={1.5} />
+                <Box ml={5}>Back to the login page</Box>
+              </Center>
+            </Anchor>
+          </Stack>
+        )}
+      </Paper>
+    </Container>
   );
 }

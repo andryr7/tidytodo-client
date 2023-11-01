@@ -1,5 +1,4 @@
 import { createStyles, Title, Text, Button, Container, Group, rem } from '@mantine/core';
-import cssClasses from './page.module.css';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -43,20 +42,18 @@ export default function NotFound() {
   const { classes } = useStyles();
 
   return (
-    <div className={cssClasses.page}>
-      <Container className={classes.root}>
-        <div className={classes.label}>404</div>
-        <Title className={classes.title}>You have found a secret place.</Title>
-        <Text color="dimmed" size="lg" align="center" className={classes.description}>
-          Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has
-          been moved to another URL.
-        </Text>
-        <Group position="center">
-          <Button component="a" href="/" variant="subtle" size="md">
-            Take me back to home page
-          </Button>
-        </Group>
-      </Container>
-    </div>
+    <Container className={classes.root}>
+      <div className={classes.label}>404</div>
+      <Title className={classes.title}>You have found a secret place.</Title>
+      <Text color="dimmed" size="lg" align="center" className={classes.description}>
+        Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has
+        been moved to another URL.
+      </Text>
+      <Group position="center">
+        <Button component="a" href="/" variant="subtle" size="md">
+          Take me back to home page
+        </Button>
+      </Group>
+    </Container>
   );
 }

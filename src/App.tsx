@@ -17,6 +17,7 @@ import ResetPassword from './pages/ResetPassword';
 import VerifyUser from './pages/VerifyUser';
 import SetNewPassword from './pages/SetNewPassword';
 import ConfirmEmail from './pages/ConfirmEmail';
+import PageLayout from './pages/PageLayout';
 
 //Components imports
 
@@ -30,27 +31,51 @@ const router = createBrowserRouter([
   },
   {
     path: '/signup',
-    element: <SignUp />
+    element: (
+      <PageLayout>
+        <SignUp />
+      </PageLayout>
+    )
   },
   {
     path: '/login',
-    element: <Login />
+    element: (
+      <PageLayout>
+        <Login />
+      </PageLayout>
+    )
   },
   {
     path: '/resetpassword',
-    element: <ResetPassword />
+    element: (
+      <PageLayout>
+        <ResetPassword />
+      </PageLayout>
+    )
   },
   {
     path: '/verifyuser',
-    element: <VerifyUser />
+    element: (
+      <PageLayout>
+        <VerifyUser />
+      </PageLayout>
+    )
   },
   {
     path: '/setnewpassword',
-    element: <SetNewPassword />
+    element: (
+      <PageLayout>
+        <SetNewPassword />
+      </PageLayout>
+    )
   },
   {
     path: '/confirmemail',
-    element: <ConfirmEmail />
+    element: (
+      <PageLayout>
+        <ConfirmEmail />
+      </PageLayout>
+    )
   }
 ]);
 

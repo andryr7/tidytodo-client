@@ -1,0 +1,25 @@
+.buttonBlock {
+  display: block;
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+}
+
+.buttonBlock::before {
+  content: '';
+  width: 50%;
+  height: 10%;
+  background-color: #ffd43b;
+  position: absolute;
+  top: -10%;
+}
+
+.buttonBlock::after {
+  content: '';
+  width: 50%;
+  height: 10%;
+  background-color: #228be6;
+  position: absolute;
+  bottom: -10%;
+  right: 0%;
+}

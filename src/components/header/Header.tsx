@@ -47,6 +47,3 @@ export function AppHeader({ navBarIsOpened, setNavBarIsOpened }: HeaderProps) {
     </Header>
   );
 }
-
-// theme.colors.yellow[4];
-// theme.colors.blue[6];

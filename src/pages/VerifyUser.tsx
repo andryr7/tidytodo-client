@@ -15,7 +15,6 @@ import {
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import cssClasses from './page.module.css';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -65,44 +64,42 @@ export default function VerifyUser() {
   }, [searchParams]);
 
   return (
-    <div className={cssClasses.page}>
-      <Container size={420} style={{ width: '100%' }}>
-        <Title className={classes.title} align="center">
-          Hello there !
-        </Title>
-        <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-          <Stack>
-            <Stack align="center">
-              {!userIsVerified && (
-                <>
-                  <span>Verifying e-mail</span>
-                  <Loader />
-                </>
-              )}
-              {userIsVerified && (
-                <Alert
-                  icon={<IconAlertCircle size="1rem" />}
-                  title="User e-mail is now verified"
-                  color="green"
-                >
-                  Your e-mail has been successfully verified ! You can now login to TidyTodo
-                </Alert>
-              )}
-              {isError && (
-                <Alert icon={<IconAlertCircle size="1rem" />} title="UnknownError" color="red">
-                  An error has occured
-                </Alert>
-              )}
-            </Stack>
+    <Container size={420} style={{ width: '100%' }}>
+      <Title className={classes.title} align="center">
+        Hello there !
+      </Title>
+      <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+        <Stack>
+          <Stack align="center">
+            {!userIsVerified && (
+              <>
+                <span>Verifying e-mail</span>
+                <Loader />
+              </>
+            )}
+            {userIsVerified && (
+              <Alert
+                icon={<IconAlertCircle size="1rem" />}
+                title="User e-mail is now verified"
+                color="green"
+              >
+                Your e-mail has been successfully verified ! You can now login to TidyTodo
+              </Alert>
+            )}
+            {isError && (
+              <Alert icon={<IconAlertCircle size="1rem" />} title="UnknownError" color="red">
+                An error has occured
+              </Alert>
+            )}
           </Stack>
-        </Paper>
-        <Anchor color="dimmed" size="sm" className={classes.control} component="a" href="/login">
-          <Center inline>
-            <IconArrowLeft size={rem(12)} stroke={1.5} />
-            <Box ml={5}>Back to the login page</Box>
-          </Center>
-        </Anchor>
-      </Container>
-    </div>
+        </Stack>
+      </Paper>
+      <Anchor color="dimmed" size="sm" className={classes.control} component="a" href="/login">
+        <Center inline>
+          <IconArrowLeft size={rem(12)} stroke={1.5} />
+          <Box ml={5}>Back to the login page</Box>
+        </Center>
+      </Anchor>
+    </Container>
   );
 }

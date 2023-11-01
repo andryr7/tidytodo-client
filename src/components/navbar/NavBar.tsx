@@ -21,6 +21,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFolderAtRoot } from '@data/api/folder';
 import { AppModeActionKind, ElementTypeActionKind, SearchActionKind } from '@data/reducer';
+import { openAboutModal } from '@components/main/About/AboutModal';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -158,12 +159,6 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
   };
 
   //Handling logout button click
-  const handleAboutClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    dispatch({ type: AppModeActionKind.SET_MODE, payload: { mode: 'about' } });
-  };
-
-  //Handling logout button click
   const handleLogoutClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onLogout();
@@ -246,7 +241,7 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
       </Navbar.Section>
 
       <Navbar.Section className={classes.section}>
-        <a href="#" className={classes.link} onClick={handleAboutClick}>
+        <a href="#" className={classes.link} onClick={openAboutModal}>
           <IconQuestionMark className={classes.linkIcon} stroke={1.5} />
           <span>About / Legal mentions</span>
         </a>
