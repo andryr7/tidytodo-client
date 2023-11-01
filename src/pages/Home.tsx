@@ -107,8 +107,12 @@ export default function Home() {
             )}
 
             {/* Element viewer/Editor */}
-            {state.currentElementType === 'note' && <NoteViewer />}
-            {state.currentElementType === 'list' && <ListViewer />}
+            {state.currentElementType === 'note' &&
+              state.appMode !== 'userSettings' &&
+              state.appMode !== 'about' && <NoteViewer />}
+            {state.currentElementType === 'list' &&
+              state.appMode !== 'userSettings' &&
+              state.appMode !== 'about' && <ListViewer />}
             {state.appMode === 'userSettings' && <UserSettings />}
             {state.appMode === 'about' && <About />}
           </SimpleGrid>

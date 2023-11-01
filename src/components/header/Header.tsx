@@ -1,14 +1,8 @@
-import {
-  Header,
-  Text,
-  MediaQuery,
-  Burger,
-  useMantineTheme,
-  Group
-} from '@mantine/core';
+import { Header, Text, MediaQuery, Burger, useMantineTheme, Group, Title } from '@mantine/core';
 import { ThemeButton } from '@components/buttons/ThemeButton';
 import { UserButton } from '@components/buttons/UserButton';
 import { HeaderBreadCrumbs } from '@components/header/HeaderBreadCrumbs';
+import { LogoButton } from '@components/buttons/LogoButton';
 
 interface HeaderProps {
   navBarIsOpened: boolean;
@@ -28,9 +22,7 @@ export function AppHeader({ navBarIsOpened, setNavBarIsOpened }: HeaderProps) {
           height: '100%'
         }}
       >
-        <Group>
-          <Text>Tidy Todo</Text>
-        </Group>
+        <LogoButton />
         <HeaderBreadCrumbs />
         <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
           <Group>
@@ -55,3 +47,6 @@ export function AppHeader({ navBarIsOpened, setNavBarIsOpened }: HeaderProps) {
     </Header>
   );
 }
+
+// theme.colors.yellow[4];
+// theme.colors.blue[6];
