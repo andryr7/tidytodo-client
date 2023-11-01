@@ -17,6 +17,7 @@ import axios from 'axios';
 import { SetPasswordPasswordStrength } from '@components/inputs/SetPasswordPasswordStrength';
 import { useForm } from '@mantine/form';
 import { SetPasswordFormValues } from '@customTypes/formValues';
+import cssClasses from './page.module.css';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -73,45 +74,47 @@ export default function SetNewPassword() {
   }
 
   return (
-    <Container size={460} my={30}>
-      <Title className={classes.title} align="center">
-        Create your new password
-      </Title>
+    <div className={cssClasses.page}>
+      <Container size={420} style={{ width: '100%' }}>
+        <Title className={classes.title} align="center">
+          Create your new password
+        </Title>
 
-      {!passwordWasChanged && (
-        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+        {!passwordWasChanged && (
+          <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+            <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+              <SetPasswordPasswordStrength form={form} />
+              <Button fullWidth mt="xl" type="submit">
+                Change password
+              </Button>
+            </Paper>
+          </form>
+        )}
+
+        {passwordWasChanged && (
           <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-            <SetPasswordPasswordStrength form={form} />
-            <Button fullWidth mt="xl" type="submit">
-              Change password
-            </Button>
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="Password successfully changed"
+              color="green"
+            >
+              Your password has been successfully changed. You can now login using it.
+            </Alert>
           </Paper>
-        </form>
-      )}
+        )}
 
-      {passwordWasChanged && (
-        <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-          <Alert
-            icon={<IconAlertCircle size="1rem" />}
-            title="Password successfully changed"
-            color="green"
-          >
-            Your password has been successfully changed. You can now login using it.
-          </Alert>
-        </Paper>
-      )}
-
-      <Anchor
-        color="dimmed"
-        size="sm"
-        className={classes.control}
-        onClick={() => navigate('/login')}
-      >
-        <Center inline>
-          <IconArrowLeft size={rem(12)} stroke={1.5} />
-          <Box ml={5}>Back to the login page</Box>
-        </Center>
-      </Anchor>
-    </Container>
+        <Anchor
+          color="dimmed"
+          size="sm"
+          className={classes.control}
+          onClick={() => navigate('/login')}
+        >
+          <Center inline>
+            <IconArrowLeft size={rem(12)} stroke={1.5} />
+            <Box ml={5}>Back to the login page</Box>
+          </Center>
+        </Anchor>
+      </Container>
+    </div>
   );
 }

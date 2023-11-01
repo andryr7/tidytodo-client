@@ -9,18 +9,20 @@ import {
   Container,
   Group,
   Button,
-  Alert
+  Alert,
+  Center
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useState } from 'react'
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { sendNewVerificationEmail } from '@auth/sendNewVerificationEmail';
+import classes from './page.module.css';
 
 interface FormValues {
-  email: string,
-  password: string,
+  email: string;
+  password: string;
 }
 
 export default function Login() {
@@ -36,20 +38,27 @@ export default function Login() {
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-    },
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email')
+    }
 
     //TODO Implement password validation ?
   });
 
   async function handleSubmit(formValues: FormValues) {
     axios
-      .post(import.meta.env.VITE_SERVER_URL+'/user/login', { email: formValues.email, password: formValues.password })
+      .post(import.meta.env.VITE_SERVER_URL + '/user/login', {
+        email: formValues.email,
+        password: formValues.password
+      })
       .then((response) => {
         //Store tokens and expirations in local storage
         const now = new Date();
-        const accessTokenExpirationDate = new Date(now.getTime() + response.data.accessTokenExpiresIn);
-        const refreshTokenExpirationDate = new Date(now.getTime() + response.data.refreshTokenExpiresIn);
+        const accessTokenExpirationDate = new Date(
+          now.getTime() + response.data.accessTokenExpiresIn
+        );
+        const refreshTokenExpirationDate = new Date(
+          now.getTime() + response.data.refreshTokenExpiresIn
+        );
         localStorage.setItem('accessTokenExpiration', accessTokenExpirationDate.toISOString());
         localStorage.setItem('refreshTokenExpiration', refreshTokenExpirationDate.toISOString());
         localStorage.setItem('accessToken', response.data.accessToken);
@@ -57,15 +66,15 @@ export default function Login() {
         navigate('/');
       })
       .catch((err) => {
-        if(err.response.status === 401) {
+        if (err.response.status === 401) {
           setBadCredentials(true);
         } else if (err.response.status === 466) {
           setUserIsNotVerified(true);
         } else {
           setUnknownError(true);
-          console.log(err)
+          console.log(err);
         }
-      })
+      });
   }
 
   async function handleNewActivationEmailClick() {
@@ -75,7 +84,8 @@ export default function Login() {
   }
 
   return (
-      <Container size={420} my={40}>
+    <div className={classes.page}>
+      <Container size={420} style={{ width: '100%' }}>
         <Title
           align="center"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
@@ -91,11 +101,22 @@ export default function Login() {
 
         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
           <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-            <TextInput label="Email" placeholder="you@email.com" required {...form.getInputProps('email')}/>
-            <PasswordInput label="Password" placeholder="Your password" required mt="md" {...form.getInputProps('password')}/>
+            <TextInput
+              label="Email"
+              placeholder="you@email.com"
+              required
+              {...form.getInputProps('email')}
+            />
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              required
+              mt="md"
+              {...form.getInputProps('password')}
+            />
             <Group position="apart" mt="lg">
               <Checkbox label="Remember me" />
-              <Anchor size="sm" onClick={() => navigate('/resetpassword')} >
+              <Anchor size="sm" onClick={() => navigate('/resetpassword')}>
                 Forgot password?
               </Anchor>
             </Group>
@@ -103,14 +124,27 @@ export default function Login() {
               Log in
             </Button>
             {badCredentials && (
-              <Alert icon={<IconAlertCircle size="1rem" />} title="Invalid credentials" color="red" withCloseButton onClose={() => setBadCredentials(false)}>
+              <Alert
+                icon={<IconAlertCircle size="1rem" />}
+                title="Invalid credentials"
+                color="red"
+                withCloseButton
+                onClose={() => setBadCredentials(false)}
+              >
                 Email or password is incorrect
               </Alert>
             )}
             {userIsNotVerified && (
               <>
-                <Alert icon={<IconAlertCircle size="1rem" />} title="E-mail is not verified" color="red" withCloseButton onClose={() => setUserIsNotVerified(false)}>
-                    Your e-mail hasn't been verified yet. Please click the link you have received to activate your account or
+                <Alert
+                  icon={<IconAlertCircle size="1rem" />}
+                  title="E-mail is not verified"
+                  color="red"
+                  withCloseButton
+                  onClose={() => setUserIsNotVerified(false)}
+                >
+                  Your e-mail hasn't been verified yet. Please click the link you have received to
+                  activate your account or
                 </Alert>
                 <Button onClick={handleNewActivationEmailClick} fullWidth>
                   Click here to receive a new activation e-mail
@@ -119,13 +153,19 @@ export default function Login() {
               //TODO ADD NEW VERIFICATION EMAIL SENT NOTIFICATION
             )}
             {unknownError && (
-              <Alert icon={<IconAlertCircle size="1rem" />} title="Oh no" color="red" withCloseButton onClose={() => setUnknownError(false)}>
+              <Alert
+                icon={<IconAlertCircle size="1rem" />}
+                title="Oh no"
+                color="red"
+                withCloseButton
+                onClose={() => setUnknownError(false)}
+              >
                 An unknown error has occured. I will be looking into it
               </Alert>
             )}
           </Paper>
         </form>
-
       </Container>
+    </div>
   );
 }

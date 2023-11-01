@@ -6,6 +6,7 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { SignUpFormValues } from '@customTypes/formValues';
 import { SignUpPasswordStrength } from '@components/inputs/SignUpPasswordStrength';
+import cssClasses from './page.module.css';
 
 export default function SignUp() {
   const [emailIsAlreadyTaken, setEmailIsAlreadyTaken] = useState(false);
@@ -56,84 +57,86 @@ export default function SignUp() {
   }
 
   return (
-    <Container size={420} my={40}>
-      <Title
-        align="center"
-        sx={(theme) => ({
-          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-          fontWeight: 900
-        })}
-      >
-        Hello there !
-      </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
-        Already have an account ?{' '}
-        <Anchor size="sm" onClick={() => navigate('/login')}>
-          Login
-        </Anchor>
-      </Text>
+    <div className={cssClasses.page}>
+      <Container size={420} style={{ width: '100%' }}>
+        <Title
+          align="center"
+          sx={(theme) => ({
+            fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+            fontWeight: 900
+          })}
+        >
+          Hello there !
+        </Title>
+        <Text color="dimmed" size="sm" align="center" mt={5}>
+          Already have an account ?{' '}
+          <Anchor size="sm" onClick={() => navigate('/login')}>
+            Login
+          </Anchor>
+        </Text>
 
-      <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-          {!userWasCreated && (
-            <>
-              <TextInput
-                label="Name"
-                placeholder="Your name"
-                required
-                {...form.getInputProps('name')}
-              />
-              <TextInput
-                label="Email"
-                placeholder="you@email.com"
-                required
-                {...form.getInputProps('email')}
-              />
-              {emailIsAlreadyTaken && (
+        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+          <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+            {!userWasCreated && (
+              <>
+                <TextInput
+                  label="Name"
+                  placeholder="Your name"
+                  required
+                  {...form.getInputProps('name')}
+                />
+                <TextInput
+                  label="Email"
+                  placeholder="you@email.com"
+                  required
+                  {...form.getInputProps('email')}
+                />
+                {emailIsAlreadyTaken && (
+                  <Alert
+                    icon={<IconAlertCircle size="1rem" />}
+                    title="Oh no"
+                    color="red"
+                    withCloseButton
+                    onClose={() => setEmailIsAlreadyTaken(false)}
+                  >
+                    A user has already signup to TidyTodo with this e-mail adress
+                  </Alert>
+                )}
+                <SignUpPasswordStrength form={form} />
+                <Button fullWidth mt="xl" type="submit">
+                  Create account
+                </Button>
+              </>
+            )}
+            {userWasCreated && (
+              <>
                 <Alert
                   icon={<IconAlertCircle size="1rem" />}
-                  title="Oh no"
-                  color="red"
-                  withCloseButton
-                  onClose={() => setEmailIsAlreadyTaken(false)}
+                  title="User successfully created"
+                  color="green"
                 >
-                  A user has already signup to TidyTodo with this e-mail adress
+                  Your account has been successfully created. Please check your e-mails/spam folder
+                  to activate your account and start using TidyTodo !
                 </Alert>
-              )}
-              <SignUpPasswordStrength form={form} />
-              <Button fullWidth mt="xl" type="submit">
-                Create account
-              </Button>
-            </>
-          )}
-          {userWasCreated && (
-            <>
+                <Button fullWidth onClick={() => navigate('/login')}>
+                  Go to login page
+                </Button>
+              </>
+            )}
+            {unknownError && (
               <Alert
                 icon={<IconAlertCircle size="1rem" />}
-                title="User successfully created"
-                color="green"
+                title="Oh no"
+                color="red"
+                withCloseButton
+                onClose={() => setUnknownError(false)}
               >
-                Your account has been successfully created. Please check your e-mails/spam folder to
-                activate your account and start using TidyTodo !
+                An unknown error has occured. Please retry later
               </Alert>
-              <Button fullWidth onClick={() => navigate('/login')}>
-                Go to login page
-              </Button>
-            </>
-          )}
-          {unknownError && (
-            <Alert
-              icon={<IconAlertCircle size="1rem" />}
-              title="Oh no"
-              color="red"
-              withCloseButton
-              onClose={() => setUnknownError(false)}
-            >
-              An unknown error has occured. Please retry later
-            </Alert>
-          )}
-        </Paper>
-      </form>
-    </Container>
+            )}
+          </Paper>
+        </form>
+      </Container>
+    </div>
   );
 }

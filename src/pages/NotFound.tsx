@@ -1,12 +1,5 @@
-import {
-  createStyles,
-  Title,
-  Text,
-  Button,
-  Container,
-  Group,
-  rem
-} from '@mantine/core';
+import { createStyles, Title, Text, Button, Container, Group, rem } from '@mantine/core';
+import cssClasses from './page.module.css';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -20,10 +13,7 @@ const useStyles = createStyles((theme) => ({
     fontSize: rem(220),
     lineHeight: 1,
     marginBottom: `calc(${theme.spacing.xl} * 1.5)`,
-    color:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[4]
-        : theme.colors.gray[2],
+    color: theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2],
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(120)
@@ -53,23 +43,20 @@ export default function NotFound() {
   const { classes } = useStyles();
 
   return (
-    <Container className={classes.root}>
-      <div className={classes.label}>404</div>
-      <Title className={classes.title}>You have found a secret place.</Title>
-      <Text
-        color="dimmed"
-        size="lg"
-        align="center"
-        className={classes.description}
-      >
-        Unfortunately, this is only a 404 page. You may have mistyped the
-        address, or the page has been moved to another URL.
-      </Text>
-      <Group position="center">
-        <Button component="a" href="/" variant="subtle" size="md">
-          Take me back to home page
-        </Button>
-      </Group>
-    </Container>
+    <div className={cssClasses.page}>
+      <Container className={classes.root}>
+        <div className={classes.label}>404</div>
+        <Title className={classes.title}>You have found a secret place.</Title>
+        <Text color="dimmed" size="lg" align="center" className={classes.description}>
+          Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has
+          been moved to another URL.
+        </Text>
+        <Group position="center">
+          <Button component="a" href="/" variant="subtle" size="md">
+            Take me back to home page
+          </Button>
+        </Group>
+      </Container>
+    </div>
   );
 }

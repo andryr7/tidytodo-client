@@ -10,31 +10,32 @@ import {
   rem,
   Stack,
   Loader,
-  Alert,
+  Alert
 } from '@mantine/core';
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import cssClasses from './page.module.css';
 
 const useStyles = createStyles((theme) => ({
   title: {
     fontSize: rem(26),
     fontWeight: 900,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`
   },
 
   controls: {
     [theme.fn.smallerThan('xs')]: {
-      flexDirection: 'column-reverse',
-    },
+      flexDirection: 'column-reverse'
+    }
   },
 
   control: {
     [theme.fn.smallerThan('xs')]: {
       width: '100%',
-      textAlign: 'center',
-    },
-  },
+      textAlign: 'center'
+    }
+  }
 }));
 
 export default function ConfirmEmail() {
@@ -46,54 +47,63 @@ export default function ConfirmEmail() {
   useEffect(() => {
     async function verifyUser() {
       await axios
-        .post(import.meta.env.VITE_SERVER_URL+'/user/confirmemail', { token: searchParams.get('token') })
+        .post(import.meta.env.VITE_SERVER_URL + '/user/confirmemail', {
+          token: searchParams.get('token')
+        })
         .then(() => {
           setEmailIsVerified(true);
         })
         .catch((err) => {
           setIsError(true);
           console.log(err);
-        })
+        });
     }
 
-    if(searchParams.get('token')) {
+    if (searchParams.get('token')) {
       verifyUser();
     }
-  },[searchParams])
+  }, [searchParams]);
 
   return (
-    <Container size={460} my={30}>
-      <Title className={classes.title} align="center">
-        Hello there !
-      </Title>
-      <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-        <Stack>
-          <Stack align='center'>
-            {!emailIsVerified && (
-              <>
-                <span>Verifying e-mail</span>
-                <Loader />
-              </>
-            )}
-            {emailIsVerified && (
-              <Alert icon={<IconAlertCircle size="1rem" />} title="new user e-mail is now verified" color="green">
-                Your e-mail has been successfully verified ! You can now use it to login to TidyTodo
-              </Alert>
-            )}
-            {isError && (
-              <Alert icon={<IconAlertCircle size="1rem" />} title="UnknownError" color="red">
-                An error has occured
-              </Alert>
-            )}
+    <div className={cssClasses.page}>
+      <Container size={420} style={{ width: '100%' }}>
+        <Title className={classes.title} align="center">
+          Hello there !
+        </Title>
+        <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+          <Stack>
+            <Stack align="center">
+              {!emailIsVerified && (
+                <>
+                  <span>Verifying e-mail</span>
+                  <Loader />
+                </>
+              )}
+              {emailIsVerified && (
+                <Alert
+                  icon={<IconAlertCircle size="1rem" />}
+                  title="new user e-mail is now verified"
+                  color="green"
+                >
+                  Your e-mail has been successfully verified ! You can now use it to login to
+                  TidyTodo
+                </Alert>
+              )}
+              {isError && (
+                <Alert icon={<IconAlertCircle size="1rem" />} title="UnknownError" color="red">
+                  An error has occured
+                </Alert>
+              )}
+            </Stack>
           </Stack>
-        </Stack>
-      </Paper>
-      <Anchor color="dimmed" size="sm" className={classes.control} component="a" href="/login">
-        <Center inline>
-          <IconArrowLeft size={rem(12)} stroke={1.5} />
-          <Box ml={5}>Back to the login page</Box>
-        </Center>
-      </Anchor>
-    </Container>
+        </Paper>
+        <Anchor color="dimmed" size="sm" className={classes.control} component="a" href="/login">
+          <Center inline>
+            <IconArrowLeft size={rem(12)} stroke={1.5} />
+            <Box ml={5}>Back to the login page</Box>
+          </Center>
+        </Anchor>
+      </Container>
+    </div>
   );
 }
