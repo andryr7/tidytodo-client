@@ -25,12 +25,6 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-// const quickAccesses = [
-//   { emoji: '⭐', label: 'Favorites', name: 'favorite' },
-//   { emoji: '🗃️', label: 'Archived', name: 'archived' },
-//   { emoji: '🔄', label: 'Last updated', name: 'lastUpdated' }
-// ];
-
 export function QuickAccessNav() {
   const { classes } = useStyles();
   const { state, dispatch } = useContext(AppContext);
@@ -55,25 +49,6 @@ export function QuickAccessNav() {
       payload: { quickAccessType: linkName }
     });
   };
-
-  // const quickAccessLinks = quickAccesses.map((collection) => (
-  //   <a
-  //     href="/"
-  //     onClick={(e) => handleQuickAccessLinkClick(e, collection.name)}
-  //     key={collection.label}
-  //     className={`${
-  //       state.currentQuickAccessType === collection.name &&
-  //       state.appMode === 'quickAccessNav'
-  //         ? 'selected'
-  //         : ''
-  //     } ${classes.collectionLink}`}
-  //   >
-  //     <span style={{ marginRight: rem(9), fontSize: rem(16) }}>
-  //       {collection.emoji}
-  //     </span>{' '}
-  //     {collection.label}
-  //   </a>
-  // ));
 
   return (
     <>
