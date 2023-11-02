@@ -57,7 +57,7 @@ export function SearchResultExplorer() {
         style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
       >
         {elements.length === 0 ? (
-          <MessageCard message="No note or list has been found with this search term" />
+          <MessageCard message={`No note or list has been found with "${state.searchInput}"`} />
         ) : (
           <div style={gridStyle}>{elements}</div>
         )}
