@@ -10,7 +10,8 @@ import {
   rem,
   getStylesRef,
   MediaQuery,
-  CloseButton
+  CloseButton,
+  UnstyledButton
 } from '@mantine/core';
 import { IconSearch, IconPlus, IconLogout, IconQuestionMark } from '@tabler/icons-react';
 import { UserButton } from '@components/buttons/UserButton';
@@ -237,14 +238,18 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
       </Navbar.Section>
 
       <Navbar.Section className={classes.section}>
-        <a href="#" className={classes.link} onClick={openAboutModal}>
+        <UnstyledButton className={classes.link} onClick={openAboutModal} style={{ width: '100%' }}>
           <IconQuestionMark className={classes.linkIcon} stroke={1.5} />
           <span>About / Legal mentions</span>
-        </a>
-        <a href="#" className={classes.link} onClick={handleLogoutClick}>
+        </UnstyledButton>
+        <UnstyledButton
+          className={classes.link}
+          onClick={handleLogoutClick}
+          style={{ width: '100%' }}
+        >
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
-        </a>
+        </UnstyledButton>
       </Navbar.Section>
     </Navbar>
   );
