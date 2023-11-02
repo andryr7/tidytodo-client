@@ -31,7 +31,6 @@ export default function Home() {
   useEffect(() => {
     if (!state.isLoggedIn) {
       //Fetching user info with stored credentials (through axios interceptor)
-      //TODO remove or add condition ?
       axiosApiInstance
         .get(import.meta.env.VITE_SERVER_URL + '/user/getinfo')
         .then(() => {

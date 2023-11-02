@@ -37,20 +37,20 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export default function VerifyUser() {
+export default function ConfirmEmail() {
   const { classes } = useStyles();
   const [searchParams] = useSearchParams();
-  const [userIsVerified, setUserIsVerified] = useState(false);
+  const [emailIsVerified, setEmailIsVerified] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     async function verifyUser() {
       await axios
-        .post(import.meta.env.VITE_SERVER_URL + '/user/verifyemail', {
+        .post(import.meta.env.VITE_SERVER_URL + '/auth/confirmemail', {
           token: searchParams.get('token')
         })
         .then(() => {
-          setUserIsVerified(true);
+          setEmailIsVerified(true);
         })
         .catch((err) => {
           setIsError(true);
@@ -71,19 +71,19 @@ export default function VerifyUser() {
       <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
         <Stack>
           <Stack align="center">
-            {!userIsVerified && (
+            {!emailIsVerified && (
               <>
                 <span>Verifying e-mail</span>
                 <Loader />
               </>
             )}
-            {userIsVerified && (
+            {emailIsVerified && (
               <Alert
                 icon={<IconAlertCircle size="1rem" />}
-                title="User e-mail is now verified"
+                title="new user e-mail is now verified"
                 color="green"
               >
-                Your e-mail has been successfully verified ! You can now login to TidyTodo
+                Your e-mail has been successfully verified ! You can now use it to login to TidyTodo
               </Alert>
             )}
             {isError && (

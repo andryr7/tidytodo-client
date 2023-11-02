@@ -32,7 +32,7 @@ export default function SignUp() {
   //TODO export from other file like tryLogin ?
   async function handleSubmit(formValues: SignUpFormValues) {
     axios
-      .post(import.meta.env.VITE_SERVER_URL + '/user/signup', {
+      .post(import.meta.env.VITE_SERVER_URL + '/auth/signup', {
         email: formValues.email,
         name: formValues.name,
         password: formValues.password

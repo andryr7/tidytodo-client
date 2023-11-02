@@ -6,7 +6,7 @@ export async function logout(): Promise<void> {
 
   //Order refresh token destruction
   axiosApiInstance
-    .post(import.meta.env.VITE_SERVER_URL + '/user/logout', {
+    .post(import.meta.env.VITE_SERVER_URL + '/auth/logout', {
       refreshToken: storedRefreshToken
     })
     .catch((err) => {

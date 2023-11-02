@@ -43,7 +43,7 @@ export default function Login() {
 
   async function handleSubmit(formValues: FormValues) {
     axios
-      .post(import.meta.env.VITE_SERVER_URL + '/user/login', {
+      .post(import.meta.env.VITE_SERVER_URL + '/auth/login', {
         email: formValues.email,
         password: formValues.password
       })

@@ -11,12 +11,12 @@ import { getBackendOptions } from '@minoru/react-dnd-treeview';
 import { Notifications } from '@mantine/notifications';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import SignUp from './pages/SignUp';
-import Login from './pages/Login';
-import ResetPassword from './pages/ResetPassword';
-import VerifyUser from './pages/VerifyUser';
-import SetNewPassword from './pages/SetNewPassword';
-import ConfirmEmail from './pages/ConfirmEmail';
+import SignUp from './pages/auth/SignUp';
+import Login from './pages/auth/Login';
+import ResetPassword from './pages/auth/ResetPassword';
+import VerifyUser from './pages/auth/VerifyUser';
+import SetNewPassword from './pages/auth/SetNewPassword';
+import ConfirmEmail from './pages/auth/ConfirmEmail';
 import PageLayout from './pages/PageLayout';
 
 //Components imports
