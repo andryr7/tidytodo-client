@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   Center,
+  Flex,
   Loader,
   Paper,
   PasswordInput,
@@ -160,9 +161,8 @@ export function UserSettings() {
   if (userQueryStatus === 'error') return <span>{JSON.stringify(userQueryError)}</span>;
 
   return (
-    <Paper shadow="xs" radius="xs" withBorder p="lg" style={{ height: '100%', width: '100%' }}>
-      <Stack>
-        <Title order={2}>User settings</Title>
+    <Flex style={{ width: '100%', height: '100%' }} justify="center" align="center">
+      <Stack style={{ width: '100%' }}>
         <Center>
           <Card
             shadow="sm"
@@ -171,6 +171,9 @@ export function UserSettings() {
             withBorder
             style={{ width: '100%', maxWidth: '700px' }}
           >
+            <Card.Section p="lg">
+              <Title order={2}>User settings</Title>
+            </Card.Section>
             <Card.Section p="lg">
               <Stack>
                 <TextInput label="Name" disabled value={userData.name} />
@@ -198,6 +201,6 @@ export function UserSettings() {
           </Card>
         </Center>
       </Stack>
-    </Paper>
+    </Flex>
   );
 }
