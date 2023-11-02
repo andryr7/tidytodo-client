@@ -21,8 +21,7 @@ export function FolderBreadCrumbs() {
 
   //Handling folders fetching loading and error status
   if (foldersQueryStatus === 'loading') return <Loader />;
-  if (foldersQueryStatus === 'error')
-    return <span>{JSON.stringify(foldersQueryError)}</span>;
+  if (foldersQueryStatus === 'error') return <span>{JSON.stringify(foldersQueryError)}</span>;
 
   const handleFolderClick = (clickedFolderId: string | number) => {
     //Setting the app mode to folder navigation
@@ -38,10 +37,7 @@ export function FolderBreadCrumbs() {
   };
 
   const breadCrumbs = breadCrumbsData.map((breadCrumb) => (
-    <Anchor
-      key={breadCrumb.id}
-      onClick={() => handleFolderClick(breadCrumb.id)}
-    >
+    <Anchor key={breadCrumb.id} onClick={() => handleFolderClick(breadCrumb.id)}>
       {breadCrumb.text}
     </Anchor>
   ));
@@ -75,8 +71,7 @@ function CurrentNoteBreadCrumb() {
 
   //Query loading and error handling
   if (noteQueryStatus === 'loading') return <Loader />;
-  if (noteQueryStatus === 'error')
-    return <span>{JSON.stringify(noteQueryError)}</span>;
+  if (noteQueryStatus === 'error') return <span>{JSON.stringify(noteQueryError)}</span>;
 
   return <Anchor style={{ textDecoration: 'underline' }}>{note.name}</Anchor>;
 }
@@ -96,8 +91,7 @@ function CurrentListBreadCrumb() {
 
   //Query loading and error handling
   if (listQueryStatus === 'loading') return <Loader />;
-  if (listQueryStatus === 'error')
-    return <span>{JSON.stringify(listQueryError)}</span>;
+  if (listQueryStatus === 'error') return <span>{JSON.stringify(listQueryError)}</span>;
 
   return <Anchor style={{ textDecoration: 'underline' }}>{list.name}</Anchor>;
 }

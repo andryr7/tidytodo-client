@@ -18,7 +18,6 @@ import { createFolder, getFolderWithContent } from '@data/api/folder';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { useMediaQuery } from '@mantine/hooks';
-import { FolderBreadCrumbs } from '@components/breadcrumbs/folderBreadCrumbs';
 import { ParentFolderCard } from '../Explorer/ParentFolderCard';
 import { IconFolder, IconList, IconNotes } from '@tabler/icons-react';
 import { createNote } from '@data/api/note';
@@ -41,9 +40,7 @@ export function FolderExplorer() {
 
   const mantineTheme = useMantineTheme();
   const queryClient = useQueryClient();
-  const headerBreadCrumbs = useMediaQuery('(min-width: 992px)');
   const largeDevice = useMediaQuery('(min-width: 1408px)');
-  const elementTabIsOpened = state.currentElementType !== null;
   const newElementNameFieldRef = useRef<HTMLInputElement>(null);
 
   //Handling folder, note and list creation
@@ -202,7 +199,13 @@ export function FolderExplorer() {
 
   const ElementsGrid = () => {
     return (
-      <Paper shadow="xs" radius="xs" withBorder p="lg">
+      <Paper
+        shadow="xs"
+        radius="xs"
+        withBorder
+        p="lg"
+        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+      >
         <Stack justify="space-between" style={{ height: '100%' }}>
           <Stack>
             <Title order={2}>{folderContent.name}</Title>
@@ -252,35 +255,10 @@ export function FolderExplorer() {
     );
   };
 
-  const BreadCrumbsElement = () => {
-    return (
-      <Paper shadow="xs" radius="xs" withBorder p="xs">
-        <FolderBreadCrumbs />
-      </Paper>
-    );
-  };
-
   return (
     <>
-      {headerBreadCrumbs && largeDevice && <ElementsGrid />}
-
-      {headerBreadCrumbs && !largeDevice && !elementTabIsOpened && <ElementsGrid />}
-
-      {!headerBreadCrumbs && largeDevice && (
-        <Stack>
-          <BreadCrumbsElement />
-          <ElementsGrid />
-        </Stack>
-      )}
-
-      {!headerBreadCrumbs && !largeDevice && elementTabIsOpened && <BreadCrumbsElement />}
-
-      {!headerBreadCrumbs && !largeDevice && !elementTabIsOpened && (
-        <Stack>
-          <BreadCrumbsElement />
-          <ElementsGrid />
-        </Stack>
-      )}
+      {largeDevice && <ElementsGrid />}
+      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
     </>
   );
 }

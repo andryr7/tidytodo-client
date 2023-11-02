@@ -1,9 +1,9 @@
 import { AppContext } from '@data/context';
 import { useContext } from 'react';
-import { FolderBreadCrumbs } from '../breadcrumbs/folderBreadCrumbs';
+import { FolderBreadCrumbs } from './folderBreadCrumbs';
 import { useMediaQuery } from '@mantine/hooks';
-import { QuickAccessBreadCrumbs } from '../breadcrumbs/quickAccessBreadCrumbs';
-import { SearchResultsBreadCrumbs } from '../breadcrumbs/searchResultsBreadCrumbs';
+import { QuickAccessBreadCrumbs } from './quickAccessBreadCrumbs';
+import { SearchResultsBreadCrumbs } from './searchResultsBreadCrumbs';
 
 export function HeaderBreadCrumbs() {
   const { state } = useContext(AppContext);

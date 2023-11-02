@@ -10,11 +10,9 @@ const useStyles = createStyles((theme) => ({
     display: 'block',
     width: '100%',
     padding: theme.spacing.md,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
     '&:hover': {
-      color: theme.colors.yellow[4],
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0]
+      color: theme.colors.yellow[4]
     }
   }
 }));

@@ -1,7 +1,7 @@
 import { Header, MediaQuery, Burger, useMantineTheme, Group } from '@mantine/core';
 import { ThemeButton } from '@components/buttons/ThemeButton';
 import { UserButton } from '@components/buttons/UserButton';
-import { HeaderBreadCrumbs } from '@components/header/HeaderBreadCrumbs';
+import { HeaderBreadCrumbs } from '@components/breadcrumbs/HeaderBreadCrumbs';
 import { LogoButton } from '@components/buttons/LogoButton';
 
 interface HeaderProps {
@@ -13,7 +13,7 @@ export function AppHeader({ navBarIsOpened, setNavBarIsOpened }: HeaderProps) {
   const theme = useMantineTheme();
 
   return (
-    <Header height={{ base: 50, md: 70 }} p="md">
+    <Header height={70} p="md">
       <div
         style={{
           display: 'flex',
@@ -38,7 +38,7 @@ export function AppHeader({ navBarIsOpened, setNavBarIsOpened }: HeaderProps) {
             <Burger
               opened={navBarIsOpened}
               onClick={() => setNavBarIsOpened((current) => !current)}
-              size="sm"
+              size="lg"
               color={theme.colors.gray[6]}
             />
           </Group>

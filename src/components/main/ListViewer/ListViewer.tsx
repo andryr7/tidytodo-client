@@ -4,9 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { getList } from '@data/api/list';
 import { ListEditor } from './ListEditor';
+import { useMediaQuery } from '@mantine/hooks';
 
 export function ListViewer() {
   const { state } = useContext(AppContext);
+  const largeDevice = useMediaQuery('(min-width: 1408px)');
 
   //List data
   const {
@@ -19,11 +21,16 @@ export function ListViewer() {
   });
 
   if (listQueryStatus === 'loading') return <Loader />;
-  if (listQueryStatus === 'error')
-    return <span>{JSON.stringify(listQueryError)}</span>;
+  if (listQueryStatus === 'error') return <span>{JSON.stringify(listQueryError)}</span>;
 
   return (
-    <Paper shadow="xs" radius="xs" withBorder p="lg">
+    <Paper
+      shadow="xs"
+      radius="xs"
+      withBorder
+      p="lg"
+      style={{ height: '100%', width: largeDevice ? '50%' : '100%' }}
+    >
       <ListEditor key={list.id} list={list} />
     </Paper>
   );
