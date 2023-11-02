@@ -49,7 +49,7 @@ export default function ResetPassword() {
 
   async function handleAskPasswordClick() {
     axios
-      .post(import.meta.env.VITE_SERVER_URL + '/user/getpasswordreset', {
+      .post(import.meta.env.VITE_SERVER_URL + '/auth/getpasswordreset', {
         email: email
       })
       .then(() => {

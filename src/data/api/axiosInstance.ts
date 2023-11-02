@@ -39,7 +39,6 @@ axiosApiInstance.interceptors.request.use(
       if (retrievedRefreshTokenExpiration < now) {
         // console.log('Refresh token is expired, redirecting to login');
         //If both tokens are expired, destroy them and redirect to login page
-        //TODO React strict mode makes the following code and redirection fail, as tokens are checked twice and the tokens are deleted on second check
         destroyAuthInfo();
         window.location.href = '/login';
         return Promise.reject(config);

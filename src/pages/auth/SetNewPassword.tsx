@@ -59,7 +59,7 @@ export default function SetNewPassword() {
 
   async function handleSubmit(formValues: SetPasswordFormValues) {
     axios
-      .post(import.meta.env.VITE_SERVER_URL + '/user/setnewpassword', {
+      .post(import.meta.env.VITE_SERVER_URL + '/auth/setnewpassword', {
         newPassword: formValues.password,
         token: searchParams.get('token')
       })

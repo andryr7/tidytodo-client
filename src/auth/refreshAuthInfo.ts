@@ -4,7 +4,7 @@ import { authInfo } from '../customTypes/authInfo';
 export function refreshAuthInfo(refreshToken: string): Promise<authInfo> {
   return new Promise((resolve, reject) => {
     axios
-      .post(import.meta.env.VITE_SERVER_URL + '/user/refreshtoken', {
+      .post(import.meta.env.VITE_SERVER_URL + '/auth/refreshtoken', {
         refreshToken: refreshToken
       })
       .then((response) => {
