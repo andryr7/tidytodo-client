@@ -4,16 +4,13 @@ import {
   Paper,
   Title,
   Container,
-  Anchor,
-  Center,
-  Box,
   rem,
   Stack,
   Loader,
   Alert,
   Button
 } from '@mantine/core';
-import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
+import { IconAlertCircle } from '@tabler/icons-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 

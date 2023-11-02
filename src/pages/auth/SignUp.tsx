@@ -1,14 +1,4 @@
-import {
-  TextInput,
-  Anchor,
-  Paper,
-  Title,
-  Text,
-  Container,
-  Button,
-  Alert,
-  Stack
-} from '@mantine/core';
+import { TextInput, Anchor, Paper, Title, Text, Container, Button, Alert } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import axios from 'axios';
