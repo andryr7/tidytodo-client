@@ -11,7 +11,7 @@
   height: 10%;
   background-color: #ffd43b;
   position: absolute;
-  top: -10%;
+  top: -5%;
 }
 
 .buttonBlock::after {

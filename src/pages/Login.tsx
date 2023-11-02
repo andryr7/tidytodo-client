@@ -111,8 +111,8 @@ export default function Login() {
             mt="md"
             {...form.getInputProps('password')}
           />
-          <Group position="apart" mt="lg">
-            <Checkbox label="Remember me" />
+          <Group position="right" mt="lg">
+            {/* <Checkbox label="Remember me" /> */}
             <Anchor size="sm" onClick={() => navigate('/resetpassword')}>
               Forgot password?
             </Anchor>
