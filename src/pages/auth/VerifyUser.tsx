@@ -10,10 +10,11 @@ import {
   rem,
   Stack,
   Loader,
-  Alert
+  Alert,
+  Button
 } from '@mantine/core';
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
 const useStyles = createStyles((theme) => ({
@@ -42,6 +43,7 @@ export default function VerifyUser() {
   const [searchParams] = useSearchParams();
   const [userIsVerified, setUserIsVerified] = useState(false);
   const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function verifyUser() {
@@ -78,13 +80,18 @@ export default function VerifyUser() {
               </>
             )}
             {userIsVerified && (
-              <Alert
-                icon={<IconAlertCircle size="1rem" />}
-                title="User e-mail is now verified"
-                color="green"
-              >
-                Your e-mail has been successfully verified ! You can now login to TidyTodo
-              </Alert>
+              <Stack>
+                <Alert
+                  icon={<IconAlertCircle size="1rem" />}
+                  title="User e-mail is now verified"
+                  color="green"
+                >
+                  Your e-mail has been successfully verified ! You can now login to TidyTodo
+                </Alert>
+                <Button fullWidth onClick={() => navigate('/login')}>
+                  Go to login page
+                </Button>
+              </Stack>
             )}
             {isError && (
               <Alert icon={<IconAlertCircle size="1rem" />} title="UnknownError" color="red">
@@ -94,12 +101,6 @@ export default function VerifyUser() {
           </Stack>
         </Stack>
       </Paper>
-      <Anchor color="dimmed" size="sm" className={classes.control} component="a" href="/login">
-        <Center inline>
-          <IconArrowLeft size={rem(12)} stroke={1.5} />
-          <Box ml={5}>Back to the login page</Box>
-        </Center>
-      </Anchor>
     </Container>
   );
 }

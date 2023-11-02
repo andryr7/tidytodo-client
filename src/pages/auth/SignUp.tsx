@@ -1,4 +1,14 @@
-import { TextInput, Anchor, Paper, Title, Text, Container, Button, Alert } from '@mantine/core';
+import {
+  TextInput,
+  Anchor,
+  Paper,
+  Title,
+  Text,
+  Container,
+  Button,
+  Alert,
+  Stack
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import axios from 'axios';
@@ -107,19 +117,14 @@ export default function SignUp() {
             </>
           )}
           {userWasCreated && (
-            <>
-              <Alert
-                icon={<IconAlertCircle size="1rem" />}
-                title="User successfully created"
-                color="green"
-              >
-                Your account has been successfully created. Please check your e-mails/spam folder to
-                activate your account and start using TidyTodo !
-              </Alert>
-              <Button fullWidth onClick={() => navigate('/login')}>
-                Go to login page
-              </Button>
-            </>
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="User successfully created"
+              color="green"
+            >
+              Your account has been successfully created. Please check your e-mails/spam folder to
+              activate your account and start using TidyTodo !
+            </Alert>
           )}
           {unknownError && (
             <Alert
