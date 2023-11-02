@@ -4,6 +4,7 @@ import { FolderBreadCrumbs } from './folderBreadCrumbs';
 import { useMediaQuery } from '@mantine/hooks';
 import { QuickAccessBreadCrumbs } from './quickAccessBreadCrumbs';
 import { SearchResultsBreadCrumbs } from './searchResultsBreadCrumbs';
+import { UserSettingsBreadCrumbs } from './userSettingsBreadCrumbs';
 
 export function HeaderBreadCrumbs() {
   const { state } = useContext(AppContext);
@@ -22,8 +23,6 @@ export function HeaderBreadCrumbs() {
         return <TagNavBreadCrumbs />;
       case 'userSettings':
         return <UserSettingsBreadCrumbs />;
-      case 'about':
-        return <AboutBreadCrumbs />;
     }
   };
 
@@ -34,12 +33,4 @@ export function HeaderBreadCrumbs() {
 
 function TagNavBreadCrumbs() {
   return <span>Tags navigation</span>;
-}
-
-function UserSettingsBreadCrumbs() {
-  return <span>User settings</span>;
-}
-
-function AboutBreadCrumbs() {
-  return <span>About / legal mentions</span>;
 }

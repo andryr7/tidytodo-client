@@ -58,8 +58,7 @@ function CurrentNoteBreadCrumb() {
 
   //Query loading and error handling
   if (noteQueryStatus === 'loading') return <Loader />;
-  if (noteQueryStatus === 'error')
-    return <span>{JSON.stringify(noteQueryError)}</span>;
+  if (noteQueryStatus === 'error') return <span>{JSON.stringify(noteQueryError)}</span>;
 
   return <Anchor style={{ textDecoration: 'underline' }}>{note.name}</Anchor>;
 }
@@ -79,8 +78,7 @@ function CurrentListBreadCrumb() {
 
   //Query loading and error handling
   if (listQueryStatus === 'loading') return <Loader />;
-  if (listQueryStatus === 'error')
-    return <span>{JSON.stringify(listQueryError)}</span>;
+  if (listQueryStatus === 'error') return <span>{JSON.stringify(listQueryError)}</span>;
 
   return <Anchor style={{ textDecoration: 'underline' }}>{list.name}</Anchor>;
 }
