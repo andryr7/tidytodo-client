@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Loader, Paper, Stack, useMantineTheme } from '@mantine/core';
+import { Loader, Paper, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { useQuery } from '@tanstack/react-query';
@@ -8,7 +8,6 @@ import { useMediaQuery } from '@mantine/hooks';
 import { getSearchedDocuments } from '@data/api/document';
 import { Note } from '@customTypes/note';
 import { List } from '@customTypes/list';
-import { QuickAccessBreadCrumbs } from '@components/breadcrumbs/quickAccessBreadCrumbs';
 import { MessageCard } from '../Explorer/MessageCard';
 
 export function SearchResultExplorer() {
@@ -22,11 +21,7 @@ export function SearchResultExplorer() {
     queryKey: ['documents', 'search'],
     queryFn: () => getSearchedDocuments({ searchInput: state.searchInput })
   });
-
-  //TODO change to theme variable
-  const headerBreadCrumbs = useMediaQuery('(min-width: 992px)');
   const largeDevice = useMediaQuery('(min-width: 1408px)');
-  const elementTabIsOpened = state.currentElementType !== null;
 
   if (documentsQueryStatus === 'loading')
     return (
@@ -54,9 +49,15 @@ export function SearchResultExplorer() {
 
   const ElementsGrid = () => {
     return (
-      <Paper shadow="xs" radius="xs" withBorder p="xs">
+      <Paper
+        shadow="xs"
+        radius="xs"
+        withBorder
+        p="xs"
+        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+      >
         {elements.length === 0 ? (
-          <MessageCard message="No note or list has been found with this search term" />
+          <MessageCard message={`No note or list has been found with "${state.searchInput}"`} />
         ) : (
           <div style={gridStyle}>{elements}</div>
         )}
@@ -64,35 +65,10 @@ export function SearchResultExplorer() {
     );
   };
 
-  const BreadCrumbsElement = () => {
-    return (
-      <Paper shadow="xs" radius="xs" withBorder p="xs">
-        <QuickAccessBreadCrumbs />
-      </Paper>
-    );
-  };
-
   return (
     <>
-      {headerBreadCrumbs && largeDevice && <ElementsGrid />}
-
-      {headerBreadCrumbs && !largeDevice && !elementTabIsOpened && <ElementsGrid />}
-
-      {!headerBreadCrumbs && largeDevice && (
-        <Stack style={{ alignSelf: 'start' }}>
-          <BreadCrumbsElement />
-          <ElementsGrid />
-        </Stack>
-      )}
-
-      {!headerBreadCrumbs && !largeDevice && elementTabIsOpened && <BreadCrumbsElement />}
-
-      {!headerBreadCrumbs && !largeDevice && !elementTabIsOpened && (
-        <Stack style={{ alignSelf: 'start' }}>
-          <BreadCrumbsElement />
-          <ElementsGrid />
-        </Stack>
-      )}
+      {largeDevice && <ElementsGrid />}
+      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
     </>
   );
 }

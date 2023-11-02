@@ -11,11 +11,7 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
-import {
-  DragDropContext,
-  Droppable,
-  DraggableLocation
-} from '@hello-pangea/dnd';
+import { DragDropContext, Droppable, DraggableLocation } from '@hello-pangea/dnd';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteList, reorderListItems, updateList } from '@data/api/list';
 import { AppContext } from '@data/context';
@@ -34,11 +30,7 @@ import {
   IconTrash,
   IconX
 } from '@tabler/icons-react';
-import {
-  AppModeActionKind,
-  ElementTypeActionKind,
-  FolderNavActionKind
-} from '@data/reducer';
+import { AppModeActionKind, ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
 import { createListItem } from '@data/api/listItem';
 import { modals } from '@mantine/modals';
 import { List } from '@customTypes/list';
@@ -153,9 +145,7 @@ export function ListEditor({ list }: { list: List }) {
       title: 'Delete List',
       centered: true,
       children: (
-        <Text size="sm">
-          {`Are you sure you want to delete the "${elementName}" list ?`}
-        </Text>
+        <Text size="sm">{`Are you sure you want to delete the "${elementName}" list ?`}</Text>
       ),
       labels: { confirm: 'Yes, delete it', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
@@ -254,9 +244,7 @@ export function ListEditor({ list }: { list: List }) {
 
   //Calculating the new list item position value
   const newListItemPosition =
-    listState.length > 0
-      ? Math.max(...listState.map((item) => item.order)) + 1
-      : 0;
+    listState.length > 0 ? Math.max(...listState.map((item) => item.order)) + 1 : 0;
 
   // Drag and drop handling
   const handleDragEnd = ({
@@ -301,12 +289,7 @@ export function ListEditor({ list }: { list: List }) {
               <Title order={2} onClick={() => setListNameIsEditable(true)}>
                 {listName}
               </Title>
-              <Tooltip
-                label="Edit name"
-                withArrow
-                position="bottom"
-                openDelay={500}
-              >
+              <Tooltip label="Edit name" withArrow position="bottom" openDelay={500}>
                 <ActionIcon onClick={() => setListNameIsEditable(true)}>
                   <IconEdit />
                 </ActionIcon>
@@ -355,34 +338,19 @@ export function ListEditor({ list }: { list: List }) {
               {list.isArchive ? <IconArchiveOff /> : <IconArchive />}
             </ActionIcon>
           </Tooltip>
-          <Tooltip
-            label="Delete list"
-            withArrow
-            position="bottom"
-            openDelay={500}
-          >
+          <Tooltip label="Delete list" withArrow position="bottom" openDelay={500}>
             <ActionIcon onClick={handleDeleteButtonClick}>
               <IconTrash />
             </ActionIcon>
           </Tooltip>
           {state.appMode !== 'folderNav' && !list.isArchive && (
-            <Tooltip
-              label="Open folder"
-              withArrow
-              position="bottom"
-              openDelay={500}
-            >
+            <Tooltip label="Open folder" withArrow position="bottom" openDelay={500}>
               <ActionIcon onClick={handleOpenFolderButtonClick}>
                 <IconFolder />
               </ActionIcon>
             </Tooltip>
           )}
-          <Tooltip
-            label="Close list"
-            withArrow
-            position="bottom"
-            openDelay={500}
-          >
+          <Tooltip label="Close list" withArrow position="bottom" openDelay={500}>
             <ActionIcon size="xl" variant="default" onClick={handleCloseList}>
               <IconX />
             </ActionIcon>
@@ -392,9 +360,7 @@ export function ListEditor({ list }: { list: List }) {
 
       {/* List items */}
       <DragDropContext
-        onDragEnd={({ destination, source }) =>
-          handleDragEnd({ destination, source })
-        }
+        onDragEnd={({ destination, source }) => handleDragEnd({ destination, source })}
       >
         <Droppable droppableId="items-list" direction="vertical">
           {(provided) => (
@@ -408,12 +374,7 @@ export function ListEditor({ list }: { list: List }) {
 
       {/* Note actions */}
       <Group position="right" style={{ marginTop: 'auto' }}>
-        <Tooltip
-          label="Add a new item"
-          withArrow
-          position="bottom"
-          openDelay={500}
-        >
+        <Tooltip label="Add a new item" withArrow position="bottom" openDelay={500}>
           <ActionIcon
             color="blue"
             size="60px"

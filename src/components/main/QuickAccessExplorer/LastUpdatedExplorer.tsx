@@ -8,7 +8,6 @@ import { useMediaQuery } from '@mantine/hooks';
 import { getLastUpdatedDocuments } from '@data/api/document';
 import { Note } from '@customTypes/note';
 import { List } from '@customTypes/list';
-import { QuickAccessBreadCrumbs } from '@components/breadcrumbs/quickAccessBreadCrumbs';
 import { MessageCard } from '../Explorer/MessageCard';
 
 export function LastUpdatedExplorer() {
@@ -22,11 +21,7 @@ export function LastUpdatedExplorer() {
     queryKey: ['documents', 'lastUpdated'],
     queryFn: () => getLastUpdatedDocuments()
   });
-
-  //TODO change to theme variable
-  const headerBreadCrumbs = useMediaQuery('(min-width: 992px)');
   const largeDevice = useMediaQuery('(min-width: 1408px)');
-  const elementTabIsOpened = state.currentElementType !== null;
 
   if (documentsQueryStatus === 'loading') return <Loader />;
   if (documentsQueryStatus === 'error') return <span>{JSON.stringify(documentsQueryError)}</span>;
@@ -46,7 +41,13 @@ export function LastUpdatedExplorer() {
 
   const ElementsGrid = () => {
     return (
-      <Paper shadow="xs" radius="xs" withBorder p="lg">
+      <Paper
+        shadow="xs"
+        radius="xs"
+        withBorder
+        p="lg"
+        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+      >
         <Stack>
           <Title order={2}>Last updated documents</Title>
           <Stack style={{ height: '100%' }}>
@@ -68,35 +69,10 @@ export function LastUpdatedExplorer() {
     );
   };
 
-  const BreadCrumbsElement = () => {
-    return (
-      <Paper shadow="xs" radius="xs" withBorder p="xs">
-        <QuickAccessBreadCrumbs />
-      </Paper>
-    );
-  };
-
   return (
     <>
-      {headerBreadCrumbs && largeDevice && <ElementsGrid />}
-
-      {headerBreadCrumbs && !largeDevice && !elementTabIsOpened && <ElementsGrid />}
-
-      {!headerBreadCrumbs && largeDevice && (
-        <Stack style={{ alignSelf: 'start' }}>
-          <BreadCrumbsElement />
-          <ElementsGrid />
-        </Stack>
-      )}
-
-      {!headerBreadCrumbs && !largeDevice && elementTabIsOpened && <BreadCrumbsElement />}
-
-      {!headerBreadCrumbs && !largeDevice && !elementTabIsOpened && (
-        <Stack style={{ alignSelf: 'start' }}>
-          <BreadCrumbsElement />
-          <ElementsGrid />
-        </Stack>
-      )}
+      {largeDevice && <ElementsGrid />}
+      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
     </>
   );
 }

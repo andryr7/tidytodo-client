@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   Center,
+  Flex,
   Loader,
   Paper,
   PasswordInput,
@@ -160,46 +161,46 @@ export function UserSettings() {
   if (userQueryStatus === 'error') return <span>{JSON.stringify(userQueryError)}</span>;
 
   return (
-    <div>
-      <Paper shadow="xs" radius="xs" withBorder p="lg">
-        <Stack>
-          <Title order={2}>User settings</Title>
-          <Center>
-            <Card
-              shadow="sm"
-              padding="lg"
-              radius="md"
-              withBorder
-              style={{ width: '100%', maxWidth: '700px' }}
-            >
-              <Card.Section p="lg">
-                <Stack>
-                  <TextInput label="Name" disabled value={userData.name} />
-                  <Button onClick={() => openCreationModal('name')}>Change name</Button>
-                </Stack>
-              </Card.Section>
-              <Card.Section p="lg" withBorder>
-                <Stack>
-                  <TextInput label="E-mail adress" disabled value={userData.email} />
-                  <Button onClick={() => openCreationModal('email')}>Change e-mail adress</Button>
-                </Stack>
-              </Card.Section>
-              <Card.Section p="lg" withBorder>
-                <Stack>
-                  <Button onClick={() => openCreationModal('password')}>Change password</Button>
-                </Stack>
-              </Card.Section>
-              <Card.Section p="lg">
-                <Stack>
-                  <Button onClick={openDeleteAccountModal} color="red">
-                    Delete account
-                  </Button>
-                </Stack>
-              </Card.Section>
-            </Card>
-          </Center>
-        </Stack>
-      </Paper>
-    </div>
+    <Flex style={{ width: '100%', height: '100%' }} justify="center" align="center">
+      <Stack style={{ width: '100%' }}>
+        <Center>
+          <Card
+            shadow="sm"
+            padding="lg"
+            radius="md"
+            withBorder
+            style={{ width: '100%', maxWidth: '700px' }}
+          >
+            <Card.Section p="lg">
+              <Title order={2}>User settings</Title>
+            </Card.Section>
+            <Card.Section p="lg">
+              <Stack>
+                <TextInput label="Name" disabled value={userData.name} />
+                <Button onClick={() => openCreationModal('name')}>Change name</Button>
+              </Stack>
+            </Card.Section>
+            <Card.Section p="lg" withBorder>
+              <Stack>
+                <TextInput label="E-mail adress" disabled value={userData.email} />
+                <Button onClick={() => openCreationModal('email')}>Change e-mail adress</Button>
+              </Stack>
+            </Card.Section>
+            <Card.Section p="lg" withBorder>
+              <Stack>
+                <Button onClick={() => openCreationModal('password')}>Change password</Button>
+              </Stack>
+            </Card.Section>
+            <Card.Section p="lg">
+              <Stack>
+                <Button onClick={openDeleteAccountModal} color="red">
+                  Delete account
+                </Button>
+              </Stack>
+            </Card.Section>
+          </Card>
+        </Center>
+      </Stack>
+    </Flex>
   );
 }

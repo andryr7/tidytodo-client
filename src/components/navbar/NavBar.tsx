@@ -10,7 +10,8 @@ import {
   rem,
   getStylesRef,
   MediaQuery,
-  CloseButton
+  CloseButton,
+  UnstyledButton
 } from '@mantine/core';
 import { IconSearch, IconPlus, IconLogout, IconQuestionMark } from '@tabler/icons-react';
 import { UserButton } from '@components/buttons/UserButton';
@@ -158,6 +159,11 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
     }
   };
 
+  const handleClearSearchButtonClick = () => {
+    setBouncingSearchInput('');
+    handleSearchInputFocus();
+  };
+
   //Handling logout button click
   const handleLogoutClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -175,9 +181,7 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
     <Navbar hidden={!opened} width={{ md: 300 }} p="md" className={classes.navbar}>
       <MediaQuery largerThan="md" styles={{ display: 'none' }}>
         <Navbar.Section className={classes.section}>
-          <UserButton
-          // image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          />
+          <UserButton />
         </Navbar.Section>
       </MediaQuery>
 
@@ -189,14 +193,7 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
         value={bouncingSearchInput}
         onChange={handleSearchInputChange}
         onFocus={handleSearchInputFocus}
-        rightSection={
-          <CloseButton
-            onClick={() => {
-              setBouncingSearchInput('');
-              handleSearchInputFocus();
-            }}
-          />
-        }
+        rightSection={<CloseButton onClick={handleClearSearchButtonClick} />}
       />
 
       {/* Quick access section */}
@@ -241,14 +238,18 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
       </Navbar.Section>
 
       <Navbar.Section className={classes.section}>
-        <a href="#" className={classes.link} onClick={openAboutModal}>
+        <UnstyledButton className={classes.link} onClick={openAboutModal} style={{ width: '100%' }}>
           <IconQuestionMark className={classes.linkIcon} stroke={1.5} />
           <span>About / Legal mentions</span>
-        </a>
-        <a href="#" className={classes.link} onClick={handleLogoutClick}>
+        </UnstyledButton>
+        <UnstyledButton
+          className={classes.link}
+          onClick={handleLogoutClick}
+          style={{ width: '100%' }}
+        >
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
-        </a>
+        </UnstyledButton>
       </Navbar.Section>
     </Navbar>
   );
