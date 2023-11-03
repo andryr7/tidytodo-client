@@ -69,7 +69,7 @@ export function NoteEditor({ note }: { note: Note }) {
 
   const { mutate: updateNoteMutate } = useMutation({
     mutationFn: updateNote,
-    onSuccess: () => {
+    onSuccess: (updatedNote) => {
       //Invalidate search results data
       queryClient.invalidateQueries({ queryKey: ['documents', 'search'] });
       //Invalidate note parent folder content
@@ -78,6 +78,13 @@ export function NoteEditor({ note }: { note: Note }) {
       });
       //Invalidate note content
       queryClient.invalidateQueries({ queryKey: ['note', note.id] });
+      //Invalidate quick access sections data
+      if (updatedNote.isArchive !== note.isArchive) {
+        queryClient.invalidateQueries(['documents', 'archived']);
+      }
+      if (updatedNote.isFavorite) {
+        queryClient.invalidateQueries(['documents', 'favorite']);
+      }
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
     },
     onError: () => {
