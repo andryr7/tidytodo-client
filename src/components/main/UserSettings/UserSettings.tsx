@@ -6,7 +6,6 @@ import {
   Center,
   Flex,
   Loader,
-  Paper,
   PasswordInput,
   Stack,
   Text,
