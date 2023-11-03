@@ -72,7 +72,7 @@ export function ListEditor({ list }: { list: List }) {
         queryClient.invalidateQueries({ queryKey: ['documents', 'favorite'] });
       }
       //Invalidate quick access sections data
-      if (updatedList.isArchive !== list.isArchive) {
+      if (updatedList.isArchive !== list.isArchive || list.isArchive) {
         queryClient.invalidateQueries(['documents', 'archived']);
       }
       if (updatedList.isFavorite) {

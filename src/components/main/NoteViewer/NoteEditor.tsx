@@ -79,7 +79,7 @@ export function NoteEditor({ note }: { note: Note }) {
       //Invalidate note content
       queryClient.invalidateQueries({ queryKey: ['note', note.id] });
       //Invalidate quick access sections data
-      if (updatedNote.isArchive !== note.isArchive) {
+      if (updatedNote.isArchive !== note.isArchive || note.isArchive) {
         queryClient.invalidateQueries(['documents', 'archived']);
       }
       if (updatedNote.isFavorite) {
