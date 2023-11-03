@@ -1,5 +1,5 @@
 import { AppContext } from '@data/context';
-import { Paper } from '@mantine/core';
+import { Paper, ScrollArea } from '@mantine/core';
 import { useContext } from 'react';
 import { FolderBreadCrumbs } from './folderBreadCrumbs';
 import { QuickAccessBreadCrumbs } from './quickAccessBreadCrumbs';
@@ -11,10 +11,12 @@ export function MainBreadCrumbs() {
   return (
     <>
       {state.appMode !== 'userSettings' && (
-        <Paper shadow="xs" radius="xs" withBorder p="xs">
-          {state.appMode === 'searchResults' && <SearchResultsBreadCrumbs />}
-          {state.appMode === 'quickAccessNav' && <QuickAccessBreadCrumbs />}
-          {state.appMode === 'folderNav' && <FolderBreadCrumbs />}
+        <Paper shadow="xs" radius="xs" withBorder p="xs" pt="md">
+          <ScrollArea type="auto" offsetScrollbars>
+            {state.appMode === 'searchResults' && <SearchResultsBreadCrumbs />}
+            {state.appMode === 'quickAccessNav' && <QuickAccessBreadCrumbs />}
+            {state.appMode === 'folderNav' && <FolderBreadCrumbs />}
+          </ScrollArea>
         </Paper>
       )}
     </>
