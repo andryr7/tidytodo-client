@@ -2,6 +2,7 @@ import { useContext, useRef } from 'react';
 import {
   ActionIcon,
   Button,
+  Center,
   Group,
   Loader,
   Paper,
@@ -166,10 +167,19 @@ export function FolderExplorer() {
 
   if (folderContentQueryStatus === 'loading')
     return (
-      <Paper shadow="xs" radius="xs" withBorder p="xs">
-        <Loader />
+      <Paper
+        shadow="xs"
+        radius="xs"
+        withBorder
+        p="lg"
+        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+      >
+        <Center style={{ height: '100%' }}>
+          <Loader />
+        </Center>
       </Paper>
     );
+
   if (folderContentQueryStatus === 'error')
     return <span>{JSON.stringify(folderContentQueryError)}</span>;
 

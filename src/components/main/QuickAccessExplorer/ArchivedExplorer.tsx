@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Loader, Paper, Stack, Title, useMantineTheme } from '@mantine/core';
+import { Center, Loader, Paper, Stack, Title, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { useQuery } from '@tanstack/react-query';
@@ -23,7 +23,21 @@ export function ArchivedExplorer() {
   });
   const largeDevice = useMediaQuery('(min-width: 1408px)');
 
-  if (documentsQueryStatus === 'loading') return <Loader />;
+  if (documentsQueryStatus === 'loading')
+    return (
+      <Paper
+        shadow="xs"
+        radius="xs"
+        withBorder
+        p="lg"
+        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+      >
+        <Center style={{ height: '100%' }}>
+          <Loader />
+        </Center>
+      </Paper>
+    );
+
   if (documentsQueryStatus === 'error') return <span>{JSON.stringify(documentsQueryError)}</span>;
 
   const noteElements = documents.Note.map((note: Note) => <NoteCard key={note.id} note={note} />);
