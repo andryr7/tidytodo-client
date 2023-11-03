@@ -6,7 +6,6 @@ import {
   Center,
   Flex,
   Loader,
-  Paper,
   PasswordInput,
   Stack,
   Text,
@@ -154,9 +153,9 @@ export function UserSettings() {
 
   if (userQueryStatus === 'loading')
     return (
-      <Paper shadow="xs" radius="xs" withBorder p="xs">
+      <Flex style={{ width: '100%', height: '100%' }} justify="center" align="center">
         <Loader />
-      </Paper>
+      </Flex>
     );
   if (userQueryStatus === 'error') return <span>{JSON.stringify(userQueryError)}</span>;
 

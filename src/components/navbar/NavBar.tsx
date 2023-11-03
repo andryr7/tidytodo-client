@@ -152,6 +152,11 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
   //Switching to search app mode when focusing the search input
   const handleSearchInputFocus = () => {
     if (state.appMode !== 'searchResults') {
+      //Closing the current element (note or list)
+      dispatch({
+        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+        payload: { type: null }
+      });
       dispatch({
         type: AppModeActionKind.SET_MODE,
         payload: { mode: 'searchResults' }

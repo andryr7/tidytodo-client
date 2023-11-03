@@ -100,7 +100,7 @@ function AppWithContext() {
           <ReactQueryDevtools />
         </QueryClientProvider>
       </ModalsProvider>
-      <Notifications />
+      <Notifications position="bottom-center" />
     </MantineProvider>
   );
 }

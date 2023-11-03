@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Loader, Paper } from '@mantine/core';
+import { Center, Loader, Paper } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { getList } from '@data/api/list';
@@ -20,7 +20,20 @@ export function ListViewer() {
     queryFn: () => getList({ listId: state.currentListId! })
   });
 
-  if (listQueryStatus === 'loading') return <Loader />;
+  if (listQueryStatus === 'loading')
+    return (
+      <Paper
+        shadow="xs"
+        radius="xs"
+        withBorder
+        p="lg"
+        style={{ height: '100%', width: largeDevice ? '50%' : '100%' }}
+      >
+        <Center style={{ height: '100%' }}>
+          <Loader />
+        </Center>
+      </Paper>
+    );
   if (listQueryStatus === 'error') return <span>{JSON.stringify(listQueryError)}</span>;
 
   return (

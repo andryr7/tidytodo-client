@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Loader, Paper, useMantineTheme } from '@mantine/core';
+import { Center, Loader, Paper, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { useQuery } from '@tanstack/react-query';
@@ -25,8 +25,16 @@ export function SearchResultExplorer() {
 
   if (documentsQueryStatus === 'loading')
     return (
-      <Paper shadow="xs" radius="xs" withBorder p="xs">
-        <Loader />
+      <Paper
+        shadow="xs"
+        radius="xs"
+        withBorder
+        p="lg"
+        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+      >
+        <Center style={{ height: '100%' }}>
+          <Loader />
+        </Center>
       </Paper>
     );
   if (documentsQueryStatus === 'error') return <span>{JSON.stringify(documentsQueryError)}</span>;
@@ -53,7 +61,7 @@ export function SearchResultExplorer() {
         shadow="xs"
         radius="xs"
         withBorder
-        p="xs"
+        p="lg"
         style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
       >
         {elements.length === 0 ? (

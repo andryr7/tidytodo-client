@@ -5,6 +5,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { QuickAccessBreadCrumbs } from './quickAccessBreadCrumbs';
 import { SearchResultsBreadCrumbs } from './searchResultsBreadCrumbs';
 import { UserSettingsBreadCrumbs } from './userSettingsBreadCrumbs';
+import { ScrollArea } from '@mantine/core';
 
 export function HeaderBreadCrumbs() {
   const { state } = useContext(AppContext);
@@ -28,7 +29,15 @@ export function HeaderBreadCrumbs() {
 
   const breadCrumbs = getBreadCrumbs();
 
-  return <>{deviceIsBig && breadCrumbs}</>;
+  return (
+    <>
+      {deviceIsBig && (
+        <ScrollArea type="auto" offsetScrollbars pt="sm">
+          {breadCrumbs}
+        </ScrollArea>
+      )}
+    </>
+  );
 }
 
 function TagNavBreadCrumbs() {

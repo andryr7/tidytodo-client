@@ -71,10 +71,14 @@ export function ListEditor({ list }: { list: List }) {
       if (updatedList.isFavorite !== list.isFavorite) {
         queryClient.invalidateQueries({ queryKey: ['documents', 'favorite'] });
       }
-      //Invalidating Archived elements data if necessary
-      if (updatedList.isArchive !== list.isArchive) {
-        queryClient.invalidateQueries({ queryKey: ['documents', 'archived'] });
+      //Invalidate quick access sections data
+      if (updatedList.isArchive !== list.isArchive || list.isArchive) {
+        queryClient.invalidateQueries(['documents', 'archived']);
       }
+      if (updatedList.isFavorite) {
+        queryClient.invalidateQueries(['documents', 'favorite']);
+      }
+      queryClient.invalidateQueries(['documents', 'lastUpdated']);
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
     },
     onError: () => {
