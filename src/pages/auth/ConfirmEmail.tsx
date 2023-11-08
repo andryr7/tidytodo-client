@@ -52,7 +52,7 @@ export default function ConfirmEmail() {
         .then(() => {
           setEmailIsVerified(true);
         })
-        .catch((err) => {
+        .catch(() => {
           setIsError(true);
           // console.log(err);
         });

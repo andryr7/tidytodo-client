@@ -65,7 +65,7 @@ export function UserSettings() {
       queryClient.invalidateQueries(['userInfo']);
       notifications.show(getUserNotification());
     },
-    onError: (error) => {
+    onError: () => {
       //TODO Add notification of error
       // console.log(error);
     }
@@ -78,7 +78,7 @@ export function UserSettings() {
       destroyAuthInfo();
       navigate('/signup');
     },
-    onError: (error) => {
+    onError: () => {
       //TODO Add notification of error
       // console.log(error);
     }

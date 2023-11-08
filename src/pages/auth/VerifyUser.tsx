@@ -51,7 +51,7 @@ export default function VerifyUser() {
         .then(() => {
           setUserIsVerified(true);
         })
-        .catch((err) => {
+        .catch(() => {
           setIsError(true);
           // console.log(err);
         });

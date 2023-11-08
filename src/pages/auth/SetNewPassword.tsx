@@ -66,7 +66,7 @@ export default function SetNewPassword() {
       .then(() => {
         setPasswordWasChanged(true);
       })
-      .catch((err) => {
+      .catch(() => {
         //TODO handle error
         // console.log(err);
       });

@@ -9,7 +9,7 @@ export async function logout(): Promise<void> {
     .post(import.meta.env.VITE_SERVER_URL + '/auth/logout', {
       refreshToken: storedRefreshToken
     })
-    .catch((err) => {
+    .catch(() => {
       // console.log(err);
     });
 }
