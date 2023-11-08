@@ -68,7 +68,7 @@ export default function SetNewPassword() {
       })
       .catch((err) => {
         //TODO handle error
-        console.log(err);
+        // console.log(err);
       });
   }
 

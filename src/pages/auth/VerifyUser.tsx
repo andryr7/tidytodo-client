@@ -53,7 +53,7 @@ export default function VerifyUser() {
         })
         .catch((err) => {
           setIsError(true);
-          console.log(err);
+          // console.log(err);
         });
     }
 

@@ -10,6 +10,6 @@ export async function logout(): Promise<void> {
       refreshToken: storedRefreshToken
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 }

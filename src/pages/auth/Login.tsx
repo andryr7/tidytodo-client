@@ -69,7 +69,7 @@ export default function Login() {
           setUserIsNotVerified(true);
         } else {
           setUnknownError(true);
-          console.log(err);
+          // console.log(err);
         }
       });
   }

@@ -67,7 +67,7 @@ export function UserSettings() {
     },
     onError: (error) => {
       //TODO Add notification of error
-      console.log(error);
+      // console.log(error);
     }
   });
 
@@ -80,7 +80,7 @@ export function UserSettings() {
     },
     onError: (error) => {
       //TODO Add notification of error
-      console.log(error);
+      // console.log(error);
     }
   });
 

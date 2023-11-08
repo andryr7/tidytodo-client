@@ -56,7 +56,7 @@ export default function ResetPassword() {
         setPasswordWasAsked(true);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }
 

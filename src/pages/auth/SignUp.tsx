@@ -50,7 +50,7 @@ export default function SignUp() {
           setEmailIsAlreadyTaken(true);
         } else {
           setUnknownError(true);
-          console.log(err);
+          // console.log(err);
         }
       });
   }

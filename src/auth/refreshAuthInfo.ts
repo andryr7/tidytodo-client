@@ -10,7 +10,7 @@ export function refreshAuthInfo(refreshToken: string): Promise<authInfo> {
       .then((response) => {
         resolve(response.data);
         //TODO REMOVE
-        console.log('New tokens were received');
+        // console.log('New tokens were received');
       })
       .catch((error) => {
         reject(error);

@@ -54,7 +54,7 @@ export default function ConfirmEmail() {
         })
         .catch((err) => {
           setIsError(true);
-          console.log(err);
+          // console.log(err);
         });
     }
 
