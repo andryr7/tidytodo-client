@@ -1,6 +1,4 @@
 import { UnstyledButton, Group, Text, createStyles, Paper, Loader } from '@mantine/core';
-import { useContext } from 'react';
-import { AppContext } from '@data/context';
 import { useQuery } from '@tanstack/react-query';
 import { getUserInfo } from '@data/api/user';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +17,6 @@ const useStyles = createStyles((theme) => ({
 
 export function UserButton() {
   const { classes } = useStyles();
-  const { dispatch } = useContext(AppContext);
   const {
     status: userQueryStatus,
     error: userQueryError,
@@ -29,13 +26,6 @@ export function UserButton() {
     queryFn: () => getUserInfo()
   });
   const navigate = useNavigate();
-
-  // const handleClick = () => {
-  //   dispatch({
-  //     type: AppModeActionKind.SET_MODE,
-  //     payload: { mode: 'userSettings' }
-  //   });
-  // };
 
   const handleClick = () => {
     navigate('/usersettings');

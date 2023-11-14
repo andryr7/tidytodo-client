@@ -5,7 +5,6 @@ import { AppContext } from '@data/context';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteList, updateList } from '@data/api/list';
 import { List } from '@customTypes/list';
-import { ElementTypeActionKind, FolderNavActionKind, ListViewActionKind } from '@data/reducer';
 import { useDrag } from 'react-dnd';
 import { ItemTypes } from '@data/dndItemTypes';
 import { modals } from '@mantine/modals';
@@ -14,13 +13,14 @@ import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
 import { MyDropResult } from '@customTypes/dropResult';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCurrentRoute } from '@utils/useCurrentRoute';
 
 export function ListCard({ list }: { list: List }) {
-  const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [listIsFavorite, setListIsFavorite] = useState(list.isFavorite);
   const [searchParams, setSearchParams] = useSearchParams();
+  const currentRoute = useCurrentRoute();
 
   //List updating handling
   const { mutate: updateListMutate } = useMutation({
@@ -35,11 +35,7 @@ export function ListCard({ list }: { list: List }) {
         queryKey: ['folderContent', list.folderId ? list.folderId : 'root']
       });
       //If the moved list was opened, switch the folder to the one containing the list
-      if (state.currentElementType === 'list' && state.currentListId === list.id) {
-        // dispatch({
-        //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        //   payload: { folderId: updatedList.folderId || 'root' }
-        // });
+      if (currentRoute === 'folders' && searchParams.get('list') === updatedList.id) {
         navigate(`/folders/${updatedList.folderId || 'root'}`);
       }
       if (!updatedList.isFavorite) {
@@ -61,15 +57,8 @@ export function ListCard({ list }: { list: List }) {
         queryKey: ['folderContent', list.folderId || 'root']
       });
       //Handling case where list was opened
-      if (state.currentElementType === 'list' && state.currentListId === list.id) {
-        dispatch({
-          type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-          payload: { type: null }
-        });
-        dispatch({
-          type: ListViewActionKind.SET_CURRENT_LIST,
-          payload: { listId: null }
-        });
+      if (searchParams.get('list') === deletedList.id) {
+        setSearchParams({});
       }
       //Updating quick access data
       if (deletedList.isFavorite) {
@@ -118,16 +107,6 @@ export function ListCard({ list }: { list: List }) {
     });
 
   const handleCardClick = () => {
-    //Setting the current element type to display explorer
-    // dispatch({
-    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-    //   payload: { type: 'list' }
-    // });
-    // //Setting the current list to the clicked one
-    // dispatch({
-    //   type: ListViewActionKind.SET_CURRENT_LIST,
-    //   payload: { listId: list.id }
-    // });
     setSearchParams({ list: list.id });
   };
 

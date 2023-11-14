@@ -1,8 +1,5 @@
-import { useContext } from 'react';
 import { Card, Flex, Loader, Title, useMantineTheme } from '@mantine/core';
 import { IconArrowBackUp } from '@tabler/icons-react';
-import { AppContext } from '@data/context';
-import { ElementTypeActionKind } from '@data/reducer';
 import { useDrop } from 'react-dnd';
 import { ItemTypes } from '@data/dndItemTypes';
 import { useQuery } from '@tanstack/react-query';
@@ -13,7 +10,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 //TODO GENERAL CLEANUP
 export function ParentFolderCard() {
-  const { dispatch } = useContext(AppContext);
   const navigate = useNavigate();
   const params = useParams();
   const theme = useMantineTheme();
@@ -45,16 +41,6 @@ export function ParentFolderCard() {
       : folders.find((folder) => folder.id === currentFolder?.parent);
 
   const handleCardClick = () => {
-    // Closing the possibly opened element
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
-    //Setting the current folder to the clicked one
-    // dispatch({
-    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-    //   payload: { folderId: parentFolder!.id }
-    // });
     navigate(`/folders/${parentFolder!.id}`);
   };
 

@@ -8,7 +8,6 @@ import { AppContext } from '@data/context';
 import { RootNode } from '@components/navbar/folderNav/RootNode';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteFolder, getFolders, updateFolder } from '@data/api/folder';
-import { AppModeActionKind, ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
 import { ItemTypes } from '@data/dndItemTypes';
 import { updateNote } from '@data/api/note';
 import { updateList } from '@data/api/list';
@@ -79,10 +78,10 @@ export function FolderNav() {
       //TODO Check if all operations are necessary - handling cascading deletion
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({ queryKey: ['folderContent', 'root'] });
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
+      // dispatch({
+      //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+      //   payload: { type: null }
+      // });
       // dispatch({
       //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
       //   payload: { folderId: 'root' }

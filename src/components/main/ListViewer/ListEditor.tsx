@@ -30,17 +30,17 @@ import {
   IconTrash,
   IconX
 } from '@tabler/icons-react';
-import { AppModeActionKind, ElementTypeActionKind } from '@data/reducer';
 import { createListItem } from '@data/api/listItem';
 import { modals } from '@mantine/modals';
 import { List } from '@customTypes/list';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCurrentRoute } from '@utils/useCurrentRoute';
 
 export function ListEditor({ list }: { list: List }) {
   const queryClient = useQueryClient();
-  const { state, dispatch } = useContext(AppContext);
+  const { dispatch } = useContext(AppContext);
   const [listName, setListName] = useState(list.name);
   const [listNameIsEditable, setListNameIsEditable] = useState(false);
   const [listColor, setListColor] = useState(list.color);
@@ -49,6 +49,7 @@ export function ListEditor({ list }: { list: List }) {
   const [listHasRatings, setListHasRatings] = useState(list.hasRatings);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const currentRoute = useCurrentRoute();
 
   const resetListInputs = () => {
     setListName(list.name);
@@ -70,18 +71,13 @@ export function ListEditor({ list }: { list: List }) {
       });
       //Invalidate list content
       queryClient.invalidateQueries({ queryKey: ['list', list.id] });
-      //Invalidating favorite elements data if necessary
+      //Invalidate quick access sections data
       if (updatedList.isFavorite !== list.isFavorite) {
         queryClient.invalidateQueries({ queryKey: ['documents', 'favorite'] });
       }
-      //Invalidate quick access sections data
-      if (updatedList.isArchive !== list.isArchive || list.isArchive) {
+      if (updatedList.isArchive !== list.isArchive) {
         queryClient.invalidateQueries(['documents', 'archived']);
       }
-      if (updatedList.isFavorite) {
-        queryClient.invalidateQueries(['documents', 'favorite']);
-      }
-      queryClient.invalidateQueries(['documents', 'lastUpdated']);
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
     },
     onError: () => {
@@ -113,13 +109,9 @@ export function ListEditor({ list }: { list: List }) {
       });
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
       //Handling mode change
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
       // dispatch({
-      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      //   payload: { folderId: list.folderId ? list.folderId : 'root' }
+      //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+      //   payload: { type: null }
       // });
       navigate(`/folders/${list.folderId || 'root'}`);
       notifications.show(
@@ -162,12 +154,7 @@ export function ListEditor({ list }: { list: List }) {
     });
 
   const handleCloseList = () => {
-    //Setting the current folder to the clicked one
-    // dispatch({
-    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-    //   payload: { type: null }
-    // });
-    setSearchParams({ list: '' });
+    setSearchParams({});
   };
 
   //List name editing handling
@@ -212,14 +199,6 @@ export function ListEditor({ list }: { list: List }) {
   };
 
   const handleOpenFolderButtonClick = () => {
-    // dispatch({
-    //   type: AppModeActionKind.SET_MODE,
-    //   payload: { mode: 'folderNav' }
-    // });
-    // dispatch({
-    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-    //   payload: { folderId: list.folderId || 'root' }
-    // });
     navigate(`/folders/${list.folderId || 'root'}`);
     setSearchParams({ list: list.id });
   };
@@ -234,22 +213,14 @@ export function ListEditor({ list }: { list: List }) {
       //Updating search results data
       queryClient.invalidateQueries(['documents', 'search']);
       //Closing the opened list and updating it
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
+      // dispatch({
+      //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+      //   payload: { type: null }
+      // });
       updateListMutate({ listId: list.id, newListIsArchive: !list.isArchive });
     } else if (list.isArchive) {
       //Updating the list, then opening it in folder navigation mode
       updateListMutate({ listId: list.id, newListIsArchive: !list.isArchive });
-      dispatch({
-        type: AppModeActionKind.SET_MODE,
-        payload: { mode: 'folderNav' }
-      });
-      // dispatch({
-      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      //   payload: { folderId: list.folderId || 'root' }
-      // });
       navigate(`/folders/${list.folderId || 'root'}`);
     }
   };
@@ -355,7 +326,7 @@ export function ListEditor({ list }: { list: List }) {
               <IconTrash />
             </ActionIcon>
           </Tooltip>
-          {!list.isArchive && (
+          {!list.isArchive && currentRoute !== 'folders' && (
             <Tooltip label="Open folder" withArrow position="bottom" openDelay={500}>
               <ActionIcon onClick={handleOpenFolderButtonClick}>
                 <IconFolder />

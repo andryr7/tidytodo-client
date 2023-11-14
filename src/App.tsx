@@ -9,7 +9,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { getBackendOptions } from '@minoru/react-dnd-treeview';
 import { Notifications } from '@mantine/notifications';
-import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import SignUp from './pages/auth/SignUp';
 import Login from './pages/auth/Login';

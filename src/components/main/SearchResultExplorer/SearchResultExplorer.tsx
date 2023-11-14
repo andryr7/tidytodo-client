@@ -1,14 +1,15 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Center, Loader, Paper, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { useMediaQuery } from '@mantine/hooks';
 import { getSearchedDocuments } from '@data/api/document';
 import { Note } from '@customTypes/note';
 import { List } from '@customTypes/list';
 import { MessageCard } from '../Explorer/MessageCard';
+import { useSearchParams } from 'react-router-dom';
 
 export function SearchResultExplorer() {
   const { state } = useContext(AppContext);
@@ -22,6 +23,13 @@ export function SearchResultExplorer() {
     queryFn: () => getSearchedDocuments({ searchInput: state.searchInput })
   });
   const largeDevice = useMediaQuery('(min-width: 1408px)');
+  const [searchParams] = useSearchParams();
+  const documentIsOpened = !!searchParams.get('note') || !!searchParams.get('list');
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries(['documents', 'search']);
+  }, [state.searchInput]);
 
   if (documentsQueryStatus === 'loading')
     return (
@@ -30,7 +38,7 @@ export function SearchResultExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Center style={{ height: '100%' }}>
           <Loader />
@@ -62,7 +70,7 @@ export function SearchResultExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         {elements.length === 0 ? (
           <MessageCard message={`No note or list has been found with "${state.searchInput}"`} />

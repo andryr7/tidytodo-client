@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Anchor, Breadcrumbs, Group, Loader } from '@mantine/core';
 import { AppContext } from '@data/context';
 import { useQuery } from '@tanstack/react-query';
-import { ElementTypeActionKind } from '@data/reducer';
+// import { ElementTypeActionKind } from '@data/reducer';
 import { getList } from '@data/api/list';
 import { getNote } from '@data/api/note';
 
@@ -11,10 +11,10 @@ export function SearchResultsBreadCrumbs() {
 
   const handleQuickAccessTypeClick = () => {
     //Closing the note/list viewer
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: null }
+    // });
   };
 
   return (
@@ -45,8 +45,7 @@ function CurrentNoteBreadCrumb() {
 
   //Query loading and error handling
   if (noteQueryStatus === 'loading') return <Loader />;
-  if (noteQueryStatus === 'error')
-    return <span>{JSON.stringify(noteQueryError)}</span>;
+  if (noteQueryStatus === 'error') return <span>{JSON.stringify(noteQueryError)}</span>;
 
   return <Anchor style={{ textDecoration: 'underline' }}>{note.name}</Anchor>;
 }
@@ -66,8 +65,7 @@ function CurrentListBreadCrumb() {
 
   //Query loading and error handling
   if (listQueryStatus === 'loading') return <Loader />;
-  if (listQueryStatus === 'error')
-    return <span>{JSON.stringify(listQueryError)}</span>;
+  if (listQueryStatus === 'error') return <span>{JSON.stringify(listQueryError)}</span>;
 
   return <Anchor style={{ textDecoration: 'underline' }}>{list.name}</Anchor>;
 }

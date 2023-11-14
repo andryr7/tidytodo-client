@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import {
   ActionIcon,
   Button,
@@ -11,8 +11,6 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import { IconEdit, IconFolder, IconTrash } from '@tabler/icons-react';
-import { AppContext } from '@data/context';
-import { ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { ItemTypes } from '@data/dndItemTypes';
 import { deleteFolder, updateFolder } from '@data/api/folder';
@@ -25,7 +23,6 @@ import { Folder } from '@customTypes/folder';
 import { useNavigate } from 'react-router-dom';
 
 export function FolderCard({ folder }: { folder: Folder }) {
-  const { dispatch } = useContext(AppContext);
   const theme = useMantineTheme();
   const queryClient = useQueryClient();
   const globalIsDragging = useDragLayer((monitor) => monitor.isDragging());
@@ -138,16 +135,6 @@ export function FolderCard({ folder }: { folder: Folder }) {
     });
 
   const handleCardClick = () => {
-    //Closing the possibly opened element
-    // dispatch({
-    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-    //   payload: { type: null }
-    // });
-    // //Setting the current folder to the clicked one
-    // dispatch({
-    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-    //   payload: { folderId: folder.id }
-    // });
     navigate(`/folders/${folder.id}`);
   };
 

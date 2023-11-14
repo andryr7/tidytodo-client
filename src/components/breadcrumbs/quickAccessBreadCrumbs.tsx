@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Anchor, Breadcrumbs, Group, Loader } from '@mantine/core';
 import { AppContext } from '@data/context';
 import { useQuery } from '@tanstack/react-query';
-import { ElementTypeActionKind } from '@data/reducer';
+// import { ElementTypeActionKind } from '@data/reducer';
 import { getList } from '@data/api/list';
 import { getNote } from '@data/api/note';
 
@@ -11,10 +11,10 @@ export function QuickAccessBreadCrumbs({ quickAccessType }: { quickAccessType: s
 
   const handleQuickAccessTypeClick = () => {
     //Closing the note/list viewer
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: null }
+    // });
   };
 
   return (

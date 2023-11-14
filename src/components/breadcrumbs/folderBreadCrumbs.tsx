@@ -4,7 +4,6 @@ import { AppContext } from '@data/context';
 import { getBreadCrumbsData } from '@utils/getBreadCrumbs';
 import { useQuery } from '@tanstack/react-query';
 import { getFolders } from '@data/api/folder';
-import { ElementTypeActionKind } from '@data/reducer';
 import { getList } from '@data/api/list';
 import { getNote } from '@data/api/note';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -28,10 +27,10 @@ export function FolderBreadCrumbs() {
 
   const handleFolderClick = (clickedFolderId: string | number) => {
     //Setting the app mode to folder navigation
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: null }
+    // });
     //Setting the current folder to the clicked one
     // dispatch({
     //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
