@@ -18,6 +18,13 @@ import VerifyUser from './pages/auth/VerifyUser';
 import SetNewPassword from './pages/auth/SetNewPassword';
 import ConfirmEmail from './pages/auth/ConfirmEmail';
 import PageLayout from './pages/PageLayout';
+import HomeLayout from './pages/HomeLayout';
+import { SearchResultExplorer } from '@components/main/SearchResultExplorer/SearchResultExplorer';
+import { FolderExplorer } from '@components/main/FolderExplorer/FolderExplorer';
+import { UserSettings } from '@components/main/UserSettings/UserSettings';
+import { FavoriteExplorer } from '@components/main/QuickAccessExplorer/FavoriteExplorer';
+import { ArchivedExplorer } from '@components/main/QuickAccessExplorer/ArchivedExplorer';
+import { LastUpdatedExplorer } from '@components/main/QuickAccessExplorer/LastUpdatedExplorer';
 
 //Components imports
 
@@ -26,7 +33,65 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: (
+      <HomeLayout>
+        <span>Welcome</span>
+      </HomeLayout>
+    ),
+    errorElement: <NotFound />
+  },
+  {
+    path: '/search/',
+    element: (
+      <HomeLayout>
+        <SearchResultExplorer />
+      </HomeLayout>
+    ),
+    errorElement: <NotFound />
+  },
+  {
+    path: '/favorites/',
+    element: (
+      <HomeLayout>
+        <FavoriteExplorer />
+      </HomeLayout>
+    ),
+    errorElement: <NotFound />
+  },
+  {
+    path: '/archived/',
+    element: (
+      <HomeLayout>
+        <ArchivedExplorer />
+      </HomeLayout>
+    ),
+    errorElement: <NotFound />
+  },
+  {
+    path: '/lastupdated/',
+    element: (
+      <HomeLayout>
+        <LastUpdatedExplorer />
+      </HomeLayout>
+    ),
+    errorElement: <NotFound />
+  },
+  {
+    path: '/folders/:folderid',
+    element: (
+      <HomeLayout>
+        <FolderExplorer />
+      </HomeLayout>
+    ),
+    errorElement: <NotFound />
+  },
+  {
+    path: '/usersettings',
+    element: (
+      <HomeLayout>
+        <UserSettings />
+      </HomeLayout>
+    ),
     errorElement: <NotFound />
   },
   {

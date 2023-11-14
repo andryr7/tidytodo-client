@@ -13,11 +13,14 @@ import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
 import { MyDropResult } from '@customTypes/dropResult';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export function NoteCard({ note }: { note: Note }) {
   const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [noteIsFavorite, setNoteIsFavorite] = useState(note.isFavorite);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   //Note favoriting handling
   const { mutate: updateNoteMutate } = useMutation({
@@ -33,10 +36,11 @@ export function NoteCard({ note }: { note: Note }) {
       });
       //If the moved note was opened, switch the folder to the one containing it
       if (state.currentElementType === 'note' && state.currentNoteId === note.id) {
-        dispatch({
-          type: FolderNavActionKind.SET_CURRENT_FOLDER,
-          payload: { folderId: updatedNote.folderId || 'root' }
-        });
+        // dispatch({
+        //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+        //   payload: { folderId: updatedNote.folderId || 'root' }
+        // });
+        navigate(`/folders/${updatedNote.folderId || 'root'}`);
       }
       if (!updatedNote.isFavorite) {
         queryClient.invalidateQueries(['documents', 'favorite']);
@@ -114,16 +118,17 @@ export function NoteCard({ note }: { note: Note }) {
     });
 
   const handleCardClick = () => {
-    //Setting the current element type to display explorer
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: 'note' }
-    });
-    //Setting the current note to the clicked one
-    dispatch({
-      type: NoteViewActionKind.SET_CURRENT_NOTE,
-      payload: { noteId: note.id }
-    });
+    // //Setting the current element type to display explorer
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: 'note' }
+    // });
+    // //Setting the current note to the clicked one
+    // dispatch({
+    //   type: NoteViewActionKind.SET_CURRENT_NOTE,
+    //   payload: { noteId: note.id }
+    // });
+    setSearchParams({ note: note.id });
   };
 
   const handleFavoriteButtonClick = (e: React.MouseEvent) => {

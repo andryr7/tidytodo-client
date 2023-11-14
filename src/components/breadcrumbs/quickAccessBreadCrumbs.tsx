@@ -6,7 +6,7 @@ import { ElementTypeActionKind } from '@data/reducer';
 import { getList } from '@data/api/list';
 import { getNote } from '@data/api/note';
 
-export function QuickAccessBreadCrumbs() {
+export function QuickAccessBreadCrumbs({ quickAccessType }: { quickAccessType: string }) {
   const { state, dispatch } = useContext(AppContext);
 
   const handleQuickAccessTypeClick = () => {
@@ -17,23 +17,10 @@ export function QuickAccessBreadCrumbs() {
     });
   };
 
-  const getBreadCrumbLabel = () => {
-    switch (state.currentQuickAccessType) {
-      case 'favorite':
-        return 'Favorite elements';
-      case 'archived':
-        return 'Archived elements';
-      case 'lastUpdated':
-        return 'Last updated elements';
-    }
-  };
-
-  const breadCrumbLabel = getBreadCrumbLabel();
-
   return (
     <Group style={{ justifyContent: 'space-between' }}>
       <Breadcrumbs>
-        <Anchor onClick={handleQuickAccessTypeClick}>{breadCrumbLabel}</Anchor>
+        <Anchor onClick={handleQuickAccessTypeClick}>{quickAccessType}</Anchor>
 
         {/* Current element breadcrumb */}
         {state.currentElementType === 'note' && <CurrentNoteBreadCrumb />}

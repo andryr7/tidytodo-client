@@ -23,6 +23,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFolderAtRoot } from '@data/api/folder';
 import { AppModeActionKind, ElementTypeActionKind, SearchActionKind } from '@data/reducer';
 import { openAboutModal } from '@components/main/About/AboutModal';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -113,6 +114,7 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
   const [bouncingSearchInput, setBouncingSearchInput] = useState(state.searchInput);
   const [debouncedSearchInput] = useDebouncedValue(bouncingSearchInput, 250);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   //Using debounced search input to update state, which will update search results
   //TODO Fix dependency array eslint warning
@@ -151,17 +153,18 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
 
   //Switching to search app mode when focusing the search input
   const handleSearchInputFocus = () => {
-    if (state.appMode !== 'searchResults') {
-      //Closing the current element (note or list)
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
-      dispatch({
-        type: AppModeActionKind.SET_MODE,
-        payload: { mode: 'searchResults' }
-      });
-    }
+    // if (state.appMode !== 'searchResults') {
+    //   //Closing the current element (note or list)
+    //   dispatch({
+    //     type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //     payload: { type: null }
+    //   });
+    //   dispatch({
+    //     type: AppModeActionKind.SET_MODE,
+    //     payload: { mode: 'searchResults' }
+    //   });
+    // }
+    navigate('/search');
   };
 
   const handleClearSearchButtonClick = () => {

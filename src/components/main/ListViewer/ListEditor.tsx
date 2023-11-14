@@ -30,12 +30,13 @@ import {
   IconTrash,
   IconX
 } from '@tabler/icons-react';
-import { AppModeActionKind, ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
+import { AppModeActionKind, ElementTypeActionKind } from '@data/reducer';
 import { createListItem } from '@data/api/listItem';
 import { modals } from '@mantine/modals';
 import { List } from '@customTypes/list';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export function ListEditor({ list }: { list: List }) {
   const queryClient = useQueryClient();
@@ -46,6 +47,8 @@ export function ListEditor({ list }: { list: List }) {
   const [listState, handlers] = useListState(list.ListItem);
   const [listIsToDo, setListIsToDo] = useState(list.isToDo);
   const [listHasRatings, setListHasRatings] = useState(list.hasRatings);
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const resetListInputs = () => {
     setListName(list.name);
@@ -114,10 +117,11 @@ export function ListEditor({ list }: { list: List }) {
         type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
         payload: { type: null }
       });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: list.folderId ? list.folderId : 'root' }
-      });
+      // dispatch({
+      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+      //   payload: { folderId: list.folderId ? list.folderId : 'root' }
+      // });
+      navigate(`/folders/${list.folderId || 'root'}`);
       notifications.show(
         getElementNotification({
           actionType: 'delete',
@@ -159,10 +163,11 @@ export function ListEditor({ list }: { list: List }) {
 
   const handleCloseList = () => {
     //Setting the current folder to the clicked one
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: null }
+    // });
+    setSearchParams({ list: '' });
   };
 
   //List name editing handling
@@ -207,14 +212,16 @@ export function ListEditor({ list }: { list: List }) {
   };
 
   const handleOpenFolderButtonClick = () => {
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'folderNav' }
-    });
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: list.folderId || 'root' }
-    });
+    // dispatch({
+    //   type: AppModeActionKind.SET_MODE,
+    //   payload: { mode: 'folderNav' }
+    // });
+    // dispatch({
+    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+    //   payload: { folderId: list.folderId || 'root' }
+    // });
+    navigate(`/folders/${list.folderId || 'root'}`);
+    setSearchParams({ list: list.id });
   };
 
   const handleListNameEditKeyDown = (e: React.KeyboardEvent) => {
@@ -239,10 +246,11 @@ export function ListEditor({ list }: { list: List }) {
         type: AppModeActionKind.SET_MODE,
         payload: { mode: 'folderNav' }
       });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: list.folderId || 'root' }
-      });
+      // dispatch({
+      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+      //   payload: { folderId: list.folderId || 'root' }
+      // });
+      navigate(`/folders/${list.folderId || 'root'}`);
     }
   };
 
@@ -347,7 +355,7 @@ export function ListEditor({ list }: { list: List }) {
               <IconTrash />
             </ActionIcon>
           </Tooltip>
-          {state.appMode !== 'folderNav' && !list.isArchive && (
+          {!list.isArchive && (
             <Tooltip label="Open folder" withArrow position="bottom" openDelay={500}>
               <ActionIcon onClick={handleOpenFolderButtonClick}>
                 <IconFolder />

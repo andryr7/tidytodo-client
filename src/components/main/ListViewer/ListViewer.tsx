@@ -1,14 +1,17 @@
-import { useContext } from 'react';
+// import { useContext } from 'react';
 import { Center, Loader, Paper } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { AppContext } from '@data/context';
+// import { AppContext } from '@data/context';
 import { getList } from '@data/api/list';
 import { ListEditor } from './ListEditor';
 import { useMediaQuery } from '@mantine/hooks';
+import { useSearchParams } from 'react-router-dom';
 
 export function ListViewer() {
-  const { state } = useContext(AppContext);
+  // const { state } = useContext(AppContext);
   const largeDevice = useMediaQuery('(min-width: 1408px)');
+  const [searchParams] = useSearchParams();
+  const listId = searchParams.get('list');
 
   //List data
   const {
@@ -16,8 +19,8 @@ export function ListViewer() {
     error: listQueryError,
     data: list
   } = useQuery({
-    queryKey: ['list', state.currentListId],
-    queryFn: () => getList({ listId: state.currentListId! })
+    queryKey: ['list', listId],
+    queryFn: () => getList({ listId: listId })
   });
 
   if (listQueryStatus === 'loading')

@@ -24,7 +24,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteNote, updateNote } from '@data/api/note';
 import { Note } from '@customTypes/note';
 import { AppContext } from '@data/context';
-import { AppModeActionKind, ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
+import { AppModeActionKind, ElementTypeActionKind } from '@data/reducer';
 import {
   IconArchive,
   IconArchiveOff,
@@ -37,15 +37,18 @@ import {
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export function NoteEditor({ note }: { note: Note }) {
   const queryClient = useQueryClient();
   const [noteIsEditable, setNoteIsEditable] = useState(false);
   const [noteName, setNoteName] = useState(note.name);
+  const navigate = useNavigate();
   const [noteNameIsEditable, setNoteNameIsEditable] = useState(false);
   const [noteColor, setNoteColor] = useState(note.color);
   // const [noteIsFavorite, setNoteIsFavorite] = useState(note.isFavorite);
   const { state, dispatch } = useContext(AppContext);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const resetNoteInputs = () => {
     editor?.commands.setContent(note.content);
@@ -108,10 +111,11 @@ export function NoteEditor({ note }: { note: Note }) {
         type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
         payload: { type: null }
       });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: note.folderId ? note.folderId : 'root' }
-      });
+      // dispatch({
+      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+      //   payload: { folderId: note.folderId ? note.folderId : 'root' }
+      // });
+      navigate(`/folders/${note.folderId || 'root'}`);
       notifications.show(
         getElementNotification({
           actionType: 'delete',
@@ -176,10 +180,11 @@ export function NoteEditor({ note }: { note: Note }) {
 
   const handleCloseNote = () => {
     //Setting the current folder to the clicked one
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: null }
+    // });
+    setSearchParams({ note: '' });
   };
 
   const handleDeleteButtonClick = () => {
@@ -191,10 +196,12 @@ export function NoteEditor({ note }: { note: Note }) {
       type: AppModeActionKind.SET_MODE,
       payload: { mode: 'folderNav' }
     });
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: note.folderId || 'root' }
-    });
+    // dispatch({
+    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+    //   payload: { folderId: note.folderId || 'root' }
+    // });
+    navigate(`/folders/${note.folderId || 'root'}`);
+    setSearchParams({ note: note.id });
   };
 
   const handleNoteNameEditKeyDown = (e: React.KeyboardEvent) => {
@@ -219,10 +226,11 @@ export function NoteEditor({ note }: { note: Note }) {
         type: AppModeActionKind.SET_MODE,
         payload: { mode: 'folderNav' }
       });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: note.folderId || 'root' }
-      });
+      // dispatch({
+      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+      //   payload: { folderId: note.folderId || 'root' }
+      // });
+      navigate(`/folders/${note.folderId || 'root'}`);
     }
   };
 
@@ -291,7 +299,7 @@ export function NoteEditor({ note }: { note: Note }) {
               <IconTrash />
             </ActionIcon>
           </Tooltip>
-          {state.appMode !== 'folderNav' && !note.isArchive && (
+          {!note.isArchive && (
             <Tooltip label="Open folder" withArrow position="bottom" openDelay={500}>
               <ActionIcon onClick={handleOpenFolderButtonClick}>
                 <IconFolder />

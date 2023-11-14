@@ -4,12 +4,15 @@ import { AppContext } from '@data/context';
 import { getBreadCrumbsData } from '@utils/getBreadCrumbs';
 import { useQuery } from '@tanstack/react-query';
 import { getFolders } from '@data/api/folder';
-import { ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
+import { ElementTypeActionKind } from '@data/reducer';
 import { getList } from '@data/api/list';
 import { getNote } from '@data/api/note';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export function FolderBreadCrumbs() {
   const { state, dispatch } = useContext(AppContext);
+  const params = useParams();
+  const navigate = useNavigate();
   //Fetching folders
   const {
     status: foldersQueryStatus,
@@ -17,7 +20,7 @@ export function FolderBreadCrumbs() {
     data: folders
   } = useQuery({ queryKey: ['folders'], queryFn: getFolders });
   //Building breadcrumb data
-  const breadCrumbsData = getBreadCrumbsData(folders!, state.currentFolderId);
+  const breadCrumbsData = getBreadCrumbsData(folders!, params.folderid!);
 
   //Handling folders fetching loading and error status
   if (foldersQueryStatus === 'loading') return <Loader />;
@@ -30,10 +33,11 @@ export function FolderBreadCrumbs() {
       payload: { type: null }
     });
     //Setting the current folder to the clicked one
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: clickedFolderId }
-    });
+    // dispatch({
+    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+    //   payload: { folderId: clickedFolderId }
+    // });
+    navigate(`/folders/${clickedFolderId}`);
   };
 
   const breadCrumbs = breadCrumbsData.map((breadCrumb) => (

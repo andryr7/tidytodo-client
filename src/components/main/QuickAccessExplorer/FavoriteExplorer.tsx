@@ -9,6 +9,7 @@ import { getFavoriteDocuments } from '@data/api/document';
 import { Note } from '@customTypes/note';
 import { List } from '@customTypes/list';
 import { MessageCard } from '../Explorer/MessageCard';
+import { useSearchParams } from 'react-router-dom';
 
 export function FavoriteExplorer() {
   const { state } = useContext(AppContext);
@@ -22,6 +23,8 @@ export function FavoriteExplorer() {
     queryFn: () => getFavoriteDocuments()
   });
   const largeDevice = useMediaQuery('(min-width: 1408px)');
+  const [searchParams] = useSearchParams();
+  const documentIsOpened = !!searchParams.get('note') || !!searchParams.get('list');
 
   if (documentsQueryStatus === 'loading')
     return (
@@ -30,7 +33,7 @@ export function FavoriteExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Center style={{ height: '100%' }}>
           <Loader />
@@ -63,7 +66,7 @@ export function FavoriteExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Stack>
           <Title order={2}>Favorites</Title>

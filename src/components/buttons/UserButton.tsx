@@ -1,9 +1,9 @@
 import { UnstyledButton, Group, Text, createStyles, Paper, Loader } from '@mantine/core';
 import { useContext } from 'react';
 import { AppContext } from '@data/context';
-import { AppModeActionKind } from '@data/reducer';
 import { useQuery } from '@tanstack/react-query';
 import { getUserInfo } from '@data/api/user';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -28,12 +28,17 @@ export function UserButton() {
     queryKey: ['userInfo'],
     queryFn: () => getUserInfo()
   });
+  const navigate = useNavigate();
+
+  // const handleClick = () => {
+  //   dispatch({
+  //     type: AppModeActionKind.SET_MODE,
+  //     payload: { mode: 'userSettings' }
+  //   });
+  // };
 
   const handleClick = () => {
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'userSettings' }
-    });
+    navigate('/usersettings');
   };
 
   if (userQueryStatus === 'loading')

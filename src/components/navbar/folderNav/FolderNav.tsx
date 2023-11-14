@@ -14,6 +14,7 @@ import { updateNote } from '@data/api/note';
 import { updateList } from '@data/api/list';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -40,6 +41,8 @@ export function FolderNav() {
   const { state, dispatch } = useContext(AppContext);
   const queryClient = useQueryClient();
   const { classes } = useStyles();
+  const navigate = useNavigate();
+  const params = useParams();
 
   //Delete confirmation modal handling
   const openDeleteFolderModal = (id: string | number, text: string) =>
@@ -80,10 +83,11 @@ export function FolderNav() {
         type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
         payload: { type: null }
       });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: 'root' }
-      });
+      // dispatch({
+      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+      //   payload: { folderId: 'root' }
+      // });
+      navigate(`/folders/${deletedFolder.folderId || 'root'}`);
       notifications.show(
         getElementNotification({
           actionType: 'delete',
@@ -180,39 +184,41 @@ export function FolderNav() {
   //Handling folder click
   const handleSelect = (node: NodeModel) => {
     //Closing the current element (note or list)
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
-    //Setting the app mode to folder navigation
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'folderNav' }
-    });
-    //Setting the current folder to the clicked one
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: node.id }
-    });
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: null }
+    // });
+    // //Setting the app mode to folder navigation
+    // dispatch({
+    //   type: AppModeActionKind.SET_MODE,
+    //   payload: { mode: 'folderNav' }
+    // });
+    // //Setting the current folder to the clicked one
+    // dispatch({
+    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+    //   payload: { folderId: node.id }
+    // });
+    navigate(`/folders/${node.id}`);
   };
 
   //Handling root folder click
   const handleRootSelect = () => {
     //Closing the current element (note or list)
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
-    //Setting the app mode to folder navigation
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'folderNav' }
-    });
-    //Setting the current folder to the clicked one
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: 'root' }
-    });
+    // dispatch({
+    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+    //   payload: { type: null }
+    // });
+    // //Setting the app mode to folder navigation
+    // dispatch({
+    //   type: AppModeActionKind.SET_MODE,
+    //   payload: { mode: 'folderNav' }
+    // });
+    // //Setting the current folder to the clicked one
+    // dispatch({
+    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
+    //   payload: { folderId: 'root' }
+    // });
+    navigate('/folders/root');
   };
 
   if (foldersQueryStatus === 'loading') return <Loader />;
@@ -220,10 +226,7 @@ export function FolderNav() {
 
   return (
     <>
-      <RootNode
-        isSelected={state.appMode === 'folderNav' && state.currentFolderId === 'root'}
-        onSelect={handleRootSelect}
-      />
+      <RootNode isSelected={params.folderid === 'root'} onSelect={handleRootSelect} />
       <Tree
         //TODO Separate tree state in a state variable to implement optimistic updating ?
         tree={folders}
@@ -236,7 +239,7 @@ export function FolderNav() {
             node={node}
             depth={depth}
             isOpen={isOpen}
-            isSelected={state.appMode === 'folderNav' && node.id === state.currentFolderId}
+            isSelected={params.folderid === node.id}
             onToggle={onToggle}
             onSelect={handleSelect}
             onTextChange={handleTextChange}
