@@ -1,9 +1,7 @@
-import { useContext } from 'react';
 import { Center, Loader, Paper, Stack, Title, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { useQuery } from '@tanstack/react-query';
-import { AppContext } from '@data/context';
 import { useMediaQuery } from '@mantine/hooks';
 import { getFavoriteDocuments } from '@data/api/document';
 import { Note } from '@customTypes/note';
@@ -12,7 +10,6 @@ import { MessageCard } from '../Explorer/MessageCard';
 import { useSearchParams } from 'react-router-dom';
 
 export function FavoriteExplorer() {
-  const { state } = useContext(AppContext);
   const mantineTheme = useMantineTheme();
   const {
     status: documentsQueryStatus,
@@ -25,6 +22,8 @@ export function FavoriteExplorer() {
   const largeDevice = useMediaQuery('(min-width: 1408px)');
   const [searchParams] = useSearchParams();
   const documentIsOpened = !!searchParams.get('note') || !!searchParams.get('list');
+  const currentList = searchParams.get('list');
+  const currentNote = searchParams.get('note');
 
   if (documentsQueryStatus === 'loading')
     return (
@@ -83,7 +82,7 @@ export function FavoriteExplorer() {
   return (
     <>
       {largeDevice && <ElementsGrid />}
-      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
+      {!largeDevice && !currentList && !currentNote && <ElementsGrid />}
     </>
   );
 }
