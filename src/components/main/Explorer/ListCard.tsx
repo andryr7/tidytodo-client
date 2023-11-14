@@ -1,7 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { ActionIcon, Card, Flex, Text, Title, Tooltip } from '@mantine/core';
 import { IconList, IconListCheck, IconStar, IconStarFilled, IconTrash } from '@tabler/icons-react';
-import { AppContext } from '@data/context';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteList, updateList } from '@data/api/list';
 import { List } from '@customTypes/list';

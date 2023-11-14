@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import {
   ActionIcon,
   ColorInput,
@@ -14,7 +14,6 @@ import { useListState } from '@mantine/hooks';
 import { DragDropContext, Droppable, DraggableLocation } from '@hello-pangea/dnd';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteList, reorderListItems, updateList } from '@data/api/list';
-import { AppContext } from '@data/context';
 import { ListItemRow } from './ListItemRow';
 import {
   IconArchive,
@@ -40,7 +39,6 @@ import { useCurrentRoute } from '@utils/useCurrentRoute';
 
 export function ListEditor({ list }: { list: List }) {
   const queryClient = useQueryClient();
-  const { dispatch } = useContext(AppContext);
   const [listName, setListName] = useState(list.name);
   const [listNameIsEditable, setListNameIsEditable] = useState(false);
   const [listColor, setListColor] = useState(list.color);
@@ -48,7 +46,7 @@ export function ListEditor({ list }: { list: List }) {
   const [listIsToDo, setListIsToDo] = useState(list.isToDo);
   const [listHasRatings, setListHasRatings] = useState(list.hasRatings);
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const currentRoute = useCurrentRoute();
 
   const resetListInputs = () => {

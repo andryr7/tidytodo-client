@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { AppShell, Flex, Loader } from '@mantine/core';
+import { AppShell, Flex, Loader, Paper } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { axiosApiInstance } from '@data/api/axiosInstance';
@@ -14,7 +14,7 @@ import { AppNavBar } from '@components/navbar/NavBar';
 import { NoteViewer } from '@components/main/NoteViewer/NoteViewer';
 import { ListViewer } from '@components/main/ListViewer/ListViewer';
 import { useMediaQuery } from '@mantine/hooks';
-import { MainBreadCrumbs } from '@components/breadcrumbs/MainBreadCrumbs';
+import { BreadCrumbs } from '@components/breadcrumbs/BreadCrumbs';
 
 export default function HomeLayout({
   children
@@ -101,7 +101,11 @@ export default function HomeLayout({
           {/* Main content */}
           <Flex direction={{ base: 'column', xl: 'row' }} gap="md" style={{ height: '100%' }}>
             {/* Breadcrumbs */}
-            {!displayHeaderBreadCrumbs && <MainBreadCrumbs />}
+            {!displayHeaderBreadCrumbs && (
+              <Paper shadow="xs" radius="xs" withBorder p="xs" pt="md">
+                <BreadCrumbs />
+              </Paper>
+            )}
 
             {/* Children components */}
             {children}

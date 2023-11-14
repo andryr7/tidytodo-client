@@ -17,7 +17,7 @@ import { QuickAccessNav } from './quickAccessNav/QuickAccessNav';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFolderAtRoot } from '@data/api/folder';
 import { openAboutModal } from '@components/main/About/AboutModal';
-import { SearchNav } from './searchNav/searchNav';
+import { SearchNav } from './searchNav/SearchNav';
 
 const useStyles = createStyles((theme) => ({
   navbar: {

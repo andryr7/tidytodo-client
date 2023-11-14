@@ -1,9 +1,9 @@
 import { Header, MediaQuery, Burger, useMantineTheme, Group } from '@mantine/core';
 import { ThemeButton } from '@components/buttons/ThemeButton';
 import { UserButton } from '@components/buttons/UserButton';
-import { HeaderBreadCrumbs } from '@components/breadcrumbs/HeaderBreadCrumbs';
 import { LogoButton } from '@components/buttons/LogoButton';
 import { useMediaQuery } from '@mantine/hooks';
+import { BreadCrumbs } from '@components/breadcrumbs/BreadCrumbs';
 
 interface HeaderProps {
   navBarIsOpened: boolean;
@@ -25,7 +25,7 @@ export function AppHeader({ navBarIsOpened, setNavBarIsOpened }: HeaderProps) {
         }}
       >
         <LogoButton />
-        {deviceIsBig && <HeaderBreadCrumbs />}
+        {deviceIsBig && <BreadCrumbs />}
         <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
           <Group>
             <div>

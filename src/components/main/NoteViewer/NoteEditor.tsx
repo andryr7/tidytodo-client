@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 
 //Rich text editor imports
 import { RichTextEditor, Link } from '@mantine/tiptap';
@@ -23,7 +23,6 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteNote, updateNote } from '@data/api/note';
 import { Note } from '@customTypes/note';
-import { AppContext } from '@data/context';
 import {
   IconArchive,
   IconArchiveOff,
@@ -46,8 +45,7 @@ export function NoteEditor({ note }: { note: Note }) {
   const navigate = useNavigate();
   const [noteNameIsEditable, setNoteNameIsEditable] = useState(false);
   const [noteColor, setNoteColor] = useState(note.color);
-  const { dispatch } = useContext(AppContext);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const currentRoute = useCurrentRoute();
 
   const resetNoteInputs = () => {

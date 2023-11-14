@@ -1,10 +1,8 @@
-import { useContext } from 'react';
 import { Tree, NodeModel, DropOptions, getDescendants } from '@minoru/react-dnd-treeview';
 import './resetliststyle.css';
 import { Loader, Text, createStyles, rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { FolderNode } from '@components/navbar/folderNav/FolderNode';
-import { AppContext } from '@data/context';
 import { RootNode } from '@components/navbar/folderNav/RootNode';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteFolder, getFolders, updateFolder } from '@data/api/folder';
@@ -37,7 +35,6 @@ export function FolderNav() {
     error: foldersQueryError,
     data: folders
   } = useQuery({ queryKey: ['folders'], queryFn: getFolders });
-  const { state, dispatch } = useContext(AppContext);
   const queryClient = useQueryClient();
   const { classes } = useStyles();
   const navigate = useNavigate();
@@ -66,7 +63,7 @@ export function FolderNav() {
       //TODO only invalidate source and destination folder content ?
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({
-        queryKey: ['folderContent', state.currentFolderId]
+        queryKey: ['folderContent', params.folderid]
       });
     }
   });
@@ -78,14 +75,6 @@ export function FolderNav() {
       //TODO Check if all operations are necessary - handling cascading deletion
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({ queryKey: ['folderContent', 'root'] });
-      // dispatch({
-      //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      //   payload: { type: null }
-      // });
-      // dispatch({
-      //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      //   payload: { folderId: 'root' }
-      // });
       navigate(`/folders/${deletedFolder.folderId || 'root'}`);
       notifications.show(
         getElementNotification({
@@ -182,41 +171,11 @@ export function FolderNav() {
 
   //Handling folder click
   const handleSelect = (node: NodeModel) => {
-    //Closing the current element (note or list)
-    // dispatch({
-    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-    //   payload: { type: null }
-    // });
-    // //Setting the app mode to folder navigation
-    // dispatch({
-    //   type: AppModeActionKind.SET_MODE,
-    //   payload: { mode: 'folderNav' }
-    // });
-    // //Setting the current folder to the clicked one
-    // dispatch({
-    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-    //   payload: { folderId: node.id }
-    // });
     navigate(`/folders/${node.id}`);
   };
 
   //Handling root folder click
   const handleRootSelect = () => {
-    //Closing the current element (note or list)
-    // dispatch({
-    //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-    //   payload: { type: null }
-    // });
-    // //Setting the app mode to folder navigation
-    // dispatch({
-    //   type: AppModeActionKind.SET_MODE,
-    //   payload: { mode: 'folderNav' }
-    // });
-    // //Setting the current folder to the clicked one
-    // dispatch({
-    //   type: FolderNavActionKind.SET_CURRENT_FOLDER,
-    //   payload: { folderId: 'root' }
-    // });
     navigate('/folders/root');
   };
 
