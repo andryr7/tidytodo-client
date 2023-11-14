@@ -14,7 +14,7 @@ import { AppNavBar } from '@components/navbar/NavBar';
 import { NoteViewer } from '@components/main/NoteViewer/NoteViewer';
 import { ListViewer } from '@components/main/ListViewer/ListViewer';
 import { useMediaQuery } from '@mantine/hooks';
-import { MainBreadCrumbs } from '@components/breadcrumbs/mainBreadCrumbs';
+import { MainBreadCrumbs } from '@components/breadcrumbs/MainBreadCrumbs';
 
 export default function HomeLayout({
   children

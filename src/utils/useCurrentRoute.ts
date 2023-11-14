@@ -17,6 +17,8 @@ export function useCurrentRoute() {
         return 'folders';
       case location.startsWith('/usersettings'):
         return 'userSettings';
+      case location.startsWith(''):
+        return 'welcome';
       default:
         return 'unknown';
     }
