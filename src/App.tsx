@@ -24,6 +24,7 @@ import { UserSettings } from '@components/main/UserSettings/UserSettings';
 import { FavoriteExplorer } from '@components/main/QuickAccessExplorer/FavoriteExplorer';
 import { ArchivedExplorer } from '@components/main/QuickAccessExplorer/ArchivedExplorer';
 import { LastUpdatedExplorer } from '@components/main/QuickAccessExplorer/LastUpdatedExplorer';
+import { HomeExplorer } from '@components/main/HomeExplorer/HomeExplorer';
 
 //Components imports
 
@@ -34,13 +35,13 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <HomeLayout>
-        <span>Welcome</span>
+        <HomeExplorer />
       </HomeLayout>
     ),
     errorElement: <NotFound />
   },
   {
-    path: '/search/',
+    path: '/search',
     element: (
       <HomeLayout>
         <SearchResultExplorer />
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />
   },
   {
-    path: '/favorites/',
+    path: '/favorites',
     element: (
       <HomeLayout>
         <FavoriteExplorer />
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />
   },
   {
-    path: '/archived/',
+    path: '/archived',
     element: (
       <HomeLayout>
         <ArchivedExplorer />
@@ -67,7 +68,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />
   },
   {
-    path: '/lastupdated/',
+    path: '/lastupdated',
     element: (
       <HomeLayout>
         <LastUpdatedExplorer />
