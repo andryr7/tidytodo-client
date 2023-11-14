@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { Center, Loader, Paper, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { useMediaQuery } from '@mantine/hooks';
 import { getSearchedDocuments } from '@data/api/document';
@@ -17,7 +17,8 @@ export function SearchResultExplorer() {
   const {
     status: documentsQueryStatus,
     error: documentsQueryError,
-    data: documents
+    data: documents,
+    refetch
   } = useQuery({
     queryKey: ['documents', 'search'],
     queryFn: () => getSearchedDocuments({ searchInput: state.searchInput })
@@ -25,11 +26,12 @@ export function SearchResultExplorer() {
   const largeDevice = useMediaQuery('(min-width: 1408px)');
   const [searchParams] = useSearchParams();
   const documentIsOpened = !!searchParams.get('note') || !!searchParams.get('list');
-  const queryClient = useQueryClient();
+  const currentList = searchParams.get('list');
+  const currentNote = searchParams.get('note');
 
   useEffect(() => {
-    queryClient.invalidateQueries(['documents', 'search']);
-  }, [state.searchInput]);
+    refetch();
+  }, [state.searchInput, refetch]);
 
   if (documentsQueryStatus === 'loading')
     return (
@@ -84,7 +86,7 @@ export function SearchResultExplorer() {
   return (
     <>
       {largeDevice && <ElementsGrid />}
-      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
+      {!largeDevice && !currentNote && !currentList && <ElementsGrid />}
     </>
   );
 }
