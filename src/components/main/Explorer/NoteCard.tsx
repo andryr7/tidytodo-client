@@ -1,7 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { ActionIcon, Card, Flex, Text, Title, Tooltip } from '@mantine/core';
 import { IconNotes, IconStar, IconStarFilled, IconTrash } from '@tabler/icons-react';
-import { AppContext } from '@data/context';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Note } from '@customTypes/note';
 import { deleteNote, updateNote } from '@data/api/note';
@@ -16,7 +15,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCurrentRoute } from '@utils/useCurrentRoute';
 
 export function NoteCard({ note }: { note: Note }) {
-  const { state } = useContext(AppContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [noteIsFavorite, setNoteIsFavorite] = useState(note.isFavorite);
@@ -38,6 +36,7 @@ export function NoteCard({ note }: { note: Note }) {
       //If the moved note was opened, switch the folder to the one containing it
       if (currentRoute === 'folders' && searchParams.get('note') === updatedNote.id) {
         navigate(`/folders/${updatedNote.folderId || 'root'}`);
+        setSearchParams({ list: updatedNote.id });
       }
       if (!updatedNote.isFavorite) {
         queryClient.invalidateQueries(['documents', 'favorite']);

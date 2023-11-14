@@ -34,9 +34,10 @@ export function ListCard({ list }: { list: List }) {
       queryClient.invalidateQueries({
         queryKey: ['folderContent', list.folderId ? list.folderId : 'root']
       });
-      //If the moved list was opened, switch the folder to the one containing the list
+      //If the moved list was opened, switch the folder to the one containing the list and keep it opened
       if (currentRoute === 'folders' && searchParams.get('list') === updatedList.id) {
         navigate(`/folders/${updatedList.folderId || 'root'}`);
+        setSearchParams({ list: updatedList.id });
       }
       if (!updatedList.isFavorite) {
         queryClient.invalidateQueries(['documents', 'favorite']);
