@@ -68,7 +68,7 @@ export function FavoriteExplorer() {
         style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Stack>
-          <Title order={2}>Favorites</Title>
+          <Title order={2}>Favorite documents</Title>
           {elements.length === 0 ? (
             <MessageCard message="There are no favorite notes or lists" />
           ) : (

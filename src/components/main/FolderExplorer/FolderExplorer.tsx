@@ -218,7 +218,7 @@ export function FolderExplorer() {
       >
         <Stack justify="space-between" style={{ height: '100%' }}>
           <Stack>
-            <Title order={2}>{folderContent.name}</Title>
+            <Title order={2}>Folder: {folderContent.name}</Title>
             {elements.length === 0 && <MessageCard message="This folder is empty" />}
             <div style={gridStyle}>
               {params.folderid !== 'root' && <ParentFolderCard />}

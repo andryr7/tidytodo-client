@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { Center, Loader, Paper, useMantineTheme } from '@mantine/core';
+import { Center, Loader, Paper, Stack, Title, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { useQuery } from '@tanstack/react-query';
@@ -62,7 +62,7 @@ export function SearchResultExplorer() {
     gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr)',
     gridTemplateRows: 'repeat(auto-fill, minmax(150px, 1fr)',
     // justifyItems: 'stretch',
-    gap: mantineTheme.spacing.sm
+    gap: mantineTheme.spacing.xl
   };
 
   const ElementsGrid = () => {
@@ -77,7 +77,10 @@ export function SearchResultExplorer() {
         {elements.length === 0 ? (
           <MessageCard message={`No note or list has been found with "${state.searchInput}"`} />
         ) : (
-          <div style={gridStyle}>{elements}</div>
+          <Stack>
+            <Title order={2}>Search results for "{state.searchInput}"</Title>
+            <div style={gridStyle}>{elements}</div>
+          </Stack>
         )}
       </Paper>
     );
