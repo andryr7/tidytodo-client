@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import {
   ActionIcon,
   Button,
@@ -17,7 +17,6 @@ import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { createFolder, getFolderWithContent } from '@data/api/folder';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AppContext } from '@data/context';
 import { useMediaQuery } from '@mantine/hooks';
 import { ParentFolderCard } from '../Explorer/ParentFolderCard';
 import { IconFolder, IconList, IconNotes } from '@tabler/icons-react';
@@ -27,22 +26,27 @@ import { modals } from '@mantine/modals';
 import { MessageCard } from '../Explorer/MessageCard';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 export function FolderExplorer() {
-  const { state } = useContext(AppContext);
+  const mantineTheme = useMantineTheme();
+  const queryClient = useQueryClient();
+  const largeDevice = useMediaQuery('(min-width: 1408px)');
+  const newElementNameFieldRef = useRef<HTMLInputElement>(null);
+  const [searchParams] = useSearchParams();
+  const documentIsOpened = !!searchParams.get('note') || !!searchParams.get('list');
+  const currentList = searchParams.get('list');
+  const currentNote = searchParams.get('note');
+
+  const params = useParams();
   const {
     status: folderContentQueryStatus,
     error: folderContentQueryError,
     data: folderContent
   } = useQuery({
-    queryKey: ['folderContent', state.currentFolderId],
-    queryFn: () => getFolderWithContent({ folderId: state.currentFolderId })
+    queryKey: ['folderContent', params.folderid],
+    queryFn: () => getFolderWithContent({ folderId: params.folderid! })
   });
-
-  const mantineTheme = useMantineTheme();
-  const queryClient = useQueryClient();
-  const largeDevice = useMediaQuery('(min-width: 1408px)');
-  const newElementNameFieldRef = useRef<HTMLInputElement>(null);
 
   //Handling folder, note and list creation
   const { mutate: createFolderMutate } = useMutation({
@@ -52,7 +56,7 @@ export function FolderExplorer() {
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       //Invalidate and refetch
       queryClient.invalidateQueries({
-        queryKey: ['folderContent', state.currentFolderId]
+        queryKey: ['folderContent', params.folderid]
       });
       notifications.show(
         getElementNotification({
@@ -72,11 +76,9 @@ export function FolderExplorer() {
     onSuccess: (newNote) => {
       //Invalidate search results data
       queryClient.invalidateQueries({ queryKey: ['documents', 'search'] });
-      //Invalidate and refetch folders
-      // queryClient.invalidateQueries({ queryKey: ['folders']})
       //Invalidate and refetch
       queryClient.invalidateQueries({
-        queryKey: ['folderContent', state.currentFolderId]
+        queryKey: ['folderContent', params.folderid]
       });
       notifications.show(
         getElementNotification({
@@ -96,11 +98,9 @@ export function FolderExplorer() {
     onSuccess: (newList) => {
       //Invalidate search results data
       queryClient.invalidateQueries({ queryKey: ['documents', 'search'] });
-      //Invalidate and refetch folders
-      // queryClient.invalidateQueries({ queryKey: ['folders']})
       //Invalidate and refetch
       queryClient.invalidateQueries({
-        queryKey: ['folderContent', state.currentFolderId]
+        queryKey: ['folderContent', params.folderid]
       });
       notifications.show(
         getElementNotification({
@@ -144,19 +144,19 @@ export function FolderExplorer() {
         case 'folder':
           createFolderMutate({
             folderName: newElementNameFieldRef.current.value,
-            parentFolderId: state.currentFolderId
+            parentFolderId: params.folderid
           });
           break;
         case 'note':
           createNoteMutate({
             noteName: newElementNameFieldRef.current.value,
-            noteFolderId: state.currentFolderId
+            noteFolderId: params.folderid!
           });
           break;
         case 'list':
           createListMutate({
             listName: newElementNameFieldRef.current.value,
-            listFolderId: state.currentFolderId
+            listFolderId: params.folderid!
           });
           break;
       }
@@ -172,7 +172,7 @@ export function FolderExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Center style={{ height: '100%' }}>
           <Loader />
@@ -214,14 +214,14 @@ export function FolderExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Stack justify="space-between" style={{ height: '100%' }}>
           <Stack>
-            <Title order={2}>{folderContent.name}</Title>
+            <Title order={2}>Folder: {folderContent.name}</Title>
             {elements.length === 0 && <MessageCard message="This folder is empty" />}
             <div style={gridStyle}>
-              {state.currentFolderId !== 'root' && <ParentFolderCard />}
+              {params.folderid !== 'root' && <ParentFolderCard />}
               {elements.length !== 0 && elements}
             </div>
           </Stack>
@@ -268,7 +268,7 @@ export function FolderExplorer() {
   return (
     <>
       {largeDevice && <ElementsGrid />}
-      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
+      {!largeDevice && !currentList && !currentNote && <ElementsGrid />}
     </>
   );
 }

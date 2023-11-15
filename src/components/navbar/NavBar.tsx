@@ -1,8 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
 import {
   createStyles,
   Navbar,
-  TextInput,
   Text,
   Group,
   ActionIcon,
@@ -10,19 +8,16 @@ import {
   rem,
   getStylesRef,
   MediaQuery,
-  CloseButton,
   UnstyledButton
 } from '@mantine/core';
-import { IconSearch, IconPlus, IconLogout, IconQuestionMark } from '@tabler/icons-react';
+import { IconPlus, IconLogout, IconQuestionMark } from '@tabler/icons-react';
 import { UserButton } from '@components/buttons/UserButton';
 import { FolderNav } from './folderNav/FolderNav';
-import { AppContext } from '@data/context';
 import { QuickAccessNav } from './quickAccessNav/QuickAccessNav';
-import { useDebouncedValue } from '@mantine/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFolderAtRoot } from '@data/api/folder';
-import { AppModeActionKind, ElementTypeActionKind, SearchActionKind } from '@data/reducer';
 import { openAboutModal } from '@components/main/About/AboutModal';
+import { SearchNav } from './searchNav/SearchNav';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -109,26 +104,7 @@ interface NavBarProps {
 
 export function AppNavBar({ opened, onLogout }: NavBarProps) {
   const { classes } = useStyles();
-  const { state, dispatch } = useContext(AppContext);
-  const [bouncingSearchInput, setBouncingSearchInput] = useState(state.searchInput);
-  const [debouncedSearchInput] = useDebouncedValue(bouncingSearchInput, 250);
   const queryClient = useQueryClient();
-
-  //Using debounced search input to update state, which will update search results
-  //TODO Fix dependency array eslint warning
-  useEffect(() => {
-    //Closing the opened element
-    if (state.currentElementType !== null) {
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
-    }
-    dispatch({
-      type: SearchActionKind.SET_SEARCH_INPUT,
-      payload: { searchInput: debouncedSearchInput }
-    });
-  }, [debouncedSearchInput, dispatch]);
 
   //Mutation handling
   //Folder creation mutation
@@ -143,31 +119,6 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
       queryClient.invalidateQueries({ queryKey: ['folders'] });
     }
   });
-
-  //Handling immediate search input state change
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBouncingSearchInput(e.target.value);
-  };
-
-  //Switching to search app mode when focusing the search input
-  const handleSearchInputFocus = () => {
-    if (state.appMode !== 'searchResults') {
-      //Closing the current element (note or list)
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
-      dispatch({
-        type: AppModeActionKind.SET_MODE,
-        payload: { mode: 'searchResults' }
-      });
-    }
-  };
-
-  const handleClearSearchButtonClick = () => {
-    setBouncingSearchInput('');
-    handleSearchInputFocus();
-  };
 
   //Handling logout button click
   const handleLogoutClick = (e: React.MouseEvent) => {
@@ -190,16 +141,7 @@ export function AppNavBar({ opened, onLogout }: NavBarProps) {
         </Navbar.Section>
       </MediaQuery>
 
-      <TextInput
-        placeholder="Search"
-        size="md"
-        icon={<IconSearch size="0.8rem" stroke={1.5} />}
-        mb="sm"
-        value={bouncingSearchInput}
-        onChange={handleSearchInputChange}
-        onFocus={handleSearchInputFocus}
-        rightSection={<CloseButton onClick={handleClearSearchButtonClick} />}
-      />
+      <SearchNav />
 
       {/* Quick access section */}
       <Navbar.Section className={classes.section}>

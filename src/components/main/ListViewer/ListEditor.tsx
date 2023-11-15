@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import {
   ActionIcon,
   ColorInput,
@@ -14,7 +14,6 @@ import { useListState } from '@mantine/hooks';
 import { DragDropContext, Droppable, DraggableLocation } from '@hello-pangea/dnd';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteList, reorderListItems, updateList } from '@data/api/list';
-import { AppContext } from '@data/context';
 import { ListItemRow } from './ListItemRow';
 import {
   IconArchive,
@@ -30,22 +29,25 @@ import {
   IconTrash,
   IconX
 } from '@tabler/icons-react';
-import { AppModeActionKind, ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
 import { createListItem } from '@data/api/listItem';
 import { modals } from '@mantine/modals';
 import { List } from '@customTypes/list';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCurrentRoute } from '@utils/useCurrentRoute';
 
 export function ListEditor({ list }: { list: List }) {
   const queryClient = useQueryClient();
-  const { state, dispatch } = useContext(AppContext);
   const [listName, setListName] = useState(list.name);
   const [listNameIsEditable, setListNameIsEditable] = useState(false);
   const [listColor, setListColor] = useState(list.color);
   const [listState, handlers] = useListState(list.ListItem);
   const [listIsToDo, setListIsToDo] = useState(list.isToDo);
   const [listHasRatings, setListHasRatings] = useState(list.hasRatings);
+  const navigate = useNavigate();
+  const [, setSearchParams] = useSearchParams();
+  const currentRoute = useCurrentRoute();
 
   const resetListInputs = () => {
     setListName(list.name);
@@ -67,18 +69,13 @@ export function ListEditor({ list }: { list: List }) {
       });
       //Invalidate list content
       queryClient.invalidateQueries({ queryKey: ['list', list.id] });
-      //Invalidating favorite elements data if necessary
+      //Invalidate quick access sections data
       if (updatedList.isFavorite !== list.isFavorite) {
         queryClient.invalidateQueries({ queryKey: ['documents', 'favorite'] });
       }
-      //Invalidate quick access sections data
-      if (updatedList.isArchive !== list.isArchive || list.isArchive) {
+      if (updatedList.isArchive !== list.isArchive) {
         queryClient.invalidateQueries(['documents', 'archived']);
       }
-      if (updatedList.isFavorite) {
-        queryClient.invalidateQueries(['documents', 'favorite']);
-      }
-      queryClient.invalidateQueries(['documents', 'lastUpdated']);
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
     },
     onError: () => {
@@ -110,14 +107,11 @@ export function ListEditor({ list }: { list: List }) {
       });
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
       //Handling mode change
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: list.folderId ? list.folderId : 'root' }
-      });
+      // dispatch({
+      //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+      //   payload: { type: null }
+      // });
+      navigate(`/folders/${list.folderId || 'root'}`);
       notifications.show(
         getElementNotification({
           actionType: 'delete',
@@ -158,11 +152,7 @@ export function ListEditor({ list }: { list: List }) {
     });
 
   const handleCloseList = () => {
-    //Setting the current folder to the clicked one
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
+    setSearchParams({});
   };
 
   //List name editing handling
@@ -207,14 +197,8 @@ export function ListEditor({ list }: { list: List }) {
   };
 
   const handleOpenFolderButtonClick = () => {
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'folderNav' }
-    });
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: list.folderId || 'root' }
-    });
+    navigate(`/folders/${list.folderId || 'root'}`);
+    setSearchParams({ list: list.id });
   };
 
   const handleListNameEditKeyDown = (e: React.KeyboardEvent) => {
@@ -227,22 +211,15 @@ export function ListEditor({ list }: { list: List }) {
       //Updating search results data
       queryClient.invalidateQueries(['documents', 'search']);
       //Closing the opened list and updating it
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
+      // dispatch({
+      //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+      //   payload: { type: null }
+      // });
       updateListMutate({ listId: list.id, newListIsArchive: !list.isArchive });
     } else if (list.isArchive) {
       //Updating the list, then opening it in folder navigation mode
       updateListMutate({ listId: list.id, newListIsArchive: !list.isArchive });
-      dispatch({
-        type: AppModeActionKind.SET_MODE,
-        payload: { mode: 'folderNav' }
-      });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: list.folderId || 'root' }
-      });
+      navigate(`/folders/${list.folderId || 'root'}`);
     }
   };
 
@@ -347,7 +324,7 @@ export function ListEditor({ list }: { list: List }) {
               <IconTrash />
             </ActionIcon>
           </Tooltip>
-          {state.appMode !== 'folderNav' && !list.isArchive && (
+          {!list.isArchive && currentRoute !== 'folders' && (
             <Tooltip label="Open folder" withArrow position="bottom" openDelay={500}>
               <ActionIcon onClick={handleOpenFolderButtonClick}>
                 <IconFolder />

@@ -1,14 +1,16 @@
-import { useContext } from 'react';
+// import { useContext } from 'react';
 import { Center, Loader, Paper } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { AppContext } from '@data/context';
+// import { AppContext } from '@data/context';
 import { getNote } from '@data/api/note';
 import { NoteEditor } from './NoteEditor';
 import { useMediaQuery } from '@mantine/hooks';
+import { useSearchParams } from 'react-router-dom';
 
 export function NoteViewer() {
-  const { state } = useContext(AppContext);
+  // const { state } = useContext(AppContext);
   const largeDevice = useMediaQuery('(min-width: 1408px)');
+  const [searchParams] = useSearchParams();
 
   //Note data
   const {
@@ -16,8 +18,8 @@ export function NoteViewer() {
     error: noteQueryError,
     data: note
   } = useQuery({
-    queryKey: ['note', state.currentNoteId],
-    queryFn: () => getNote({ noteId: state.currentNoteId })
+    queryKey: ['note', searchParams.get('note')],
+    queryFn: () => getNote({ noteId: searchParams.get('note') })
   });
 
   if (noteQueryStatus === 'loading')

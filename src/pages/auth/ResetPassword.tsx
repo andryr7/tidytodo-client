@@ -104,7 +104,7 @@ export default function ResetPassword() {
               title="Reset password email sent"
               color="green"
             >
-              If an account linked to this adress exists, an e-mail has been sent to reset its
+              If an account linked to this address exists, an e-mail has been sent to reset its
               password.
             </Alert>
             <Anchor

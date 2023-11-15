@@ -1,11 +1,9 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { ActionIcon, Card, Flex, Text, Title, Tooltip } from '@mantine/core';
 import { IconNotes, IconStar, IconStarFilled, IconTrash } from '@tabler/icons-react';
-import { AppContext } from '@data/context';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Note } from '@customTypes/note';
 import { deleteNote, updateNote } from '@data/api/note';
-import { ElementTypeActionKind, FolderNavActionKind, NoteViewActionKind } from '@data/reducer';
 import { useDrag } from 'react-dnd';
 import { ItemTypes } from '@data/dndItemTypes';
 import classes from './Card.module.css';
@@ -13,11 +11,15 @@ import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
 import { MyDropResult } from '@customTypes/dropResult';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCurrentRoute } from '@utils/useCurrentRoute';
 
 export function NoteCard({ note }: { note: Note }) {
-  const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [noteIsFavorite, setNoteIsFavorite] = useState(note.isFavorite);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentRoute = useCurrentRoute();
 
   //Note favoriting handling
   const { mutate: updateNoteMutate } = useMutation({
@@ -32,11 +34,9 @@ export function NoteCard({ note }: { note: Note }) {
         queryKey: ['folderContent', note.folderId ? note.folderId : 'root']
       });
       //If the moved note was opened, switch the folder to the one containing it
-      if (state.currentElementType === 'note' && state.currentNoteId === note.id) {
-        dispatch({
-          type: FolderNavActionKind.SET_CURRENT_FOLDER,
-          payload: { folderId: updatedNote.folderId || 'root' }
-        });
+      if (currentRoute === 'folders' && searchParams.get('note') === updatedNote.id) {
+        navigate(`/folders/${updatedNote.folderId || 'root'}`);
+        setSearchParams({ list: updatedNote.id });
       }
       if (!updatedNote.isFavorite) {
         queryClient.invalidateQueries(['documents', 'favorite']);
@@ -57,15 +57,8 @@ export function NoteCard({ note }: { note: Note }) {
         queryKey: ['folderContent', note.folderId || 'root']
       });
       //Handling case where note was opened
-      if (state.currentElementType === 'note' && state.currentNoteId === note.id) {
-        dispatch({
-          type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-          payload: { type: null }
-        });
-        dispatch({
-          type: NoteViewActionKind.SET_CURRENT_NOTE,
-          payload: { noteId: null }
-        });
+      if (searchParams.get('list') === deletedNote.id) {
+        setSearchParams({});
       }
       //Updating quick access data
       if (deletedNote.isFavorite) {
@@ -114,16 +107,7 @@ export function NoteCard({ note }: { note: Note }) {
     });
 
   const handleCardClick = () => {
-    //Setting the current element type to display explorer
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: 'note' }
-    });
-    //Setting the current note to the clicked one
-    dispatch({
-      type: NoteViewActionKind.SET_CURRENT_NOTE,
-      payload: { noteId: note.id }
-    });
+    setSearchParams({ note: note.id });
   };
 
   const handleFavoriteButtonClick = (e: React.MouseEvent) => {

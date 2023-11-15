@@ -1,17 +1,15 @@
-import { useContext } from 'react';
 import { Center, Loader, Paper, Stack, Title, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { useQuery } from '@tanstack/react-query';
-import { AppContext } from '@data/context';
 import { useMediaQuery } from '@mantine/hooks';
 import { getArchivedDocuments } from '@data/api/document';
 import { Note } from '@customTypes/note';
 import { List } from '@customTypes/list';
 import { MessageCard } from '../Explorer/MessageCard';
+import { useSearchParams } from 'react-router-dom';
 
 export function ArchivedExplorer() {
-  const { state } = useContext(AppContext);
   const mantineTheme = useMantineTheme();
   const {
     status: documentsQueryStatus,
@@ -22,6 +20,10 @@ export function ArchivedExplorer() {
     queryFn: () => getArchivedDocuments()
   });
   const largeDevice = useMediaQuery('(min-width: 1408px)');
+  const [searchParams] = useSearchParams();
+  const documentIsOpened = !!searchParams.get('note') || !!searchParams.get('list');
+  const currentList = searchParams.get('list');
+  const currentNote = searchParams.get('note');
 
   if (documentsQueryStatus === 'loading')
     return (
@@ -30,7 +32,7 @@ export function ArchivedExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Center style={{ height: '100%' }}>
           <Loader />
@@ -63,7 +65,7 @@ export function ArchivedExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Stack>
           <Title order={2}>Archived documents</Title>
@@ -80,7 +82,7 @@ export function ArchivedExplorer() {
   return (
     <>
       {largeDevice && <ElementsGrid />}
-      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
+      {!largeDevice && !currentList && !currentNote && <ElementsGrid />}
     </>
   );
 }

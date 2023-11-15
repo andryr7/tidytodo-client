@@ -1,4 +1,14 @@
-import { TextInput, Anchor, Paper, Title, Text, Container, Button, Alert } from '@mantine/core';
+import {
+  TextInput,
+  Anchor,
+  Paper,
+  Title,
+  Text,
+  Container,
+  Button,
+  Alert,
+  Stack
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import axios from 'axios';
@@ -76,7 +86,7 @@ export default function SignUp() {
       <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           {!userWasCreated && (
-            <>
+            <Stack>
               <TextInput
                 label="Name"
                 placeholder="Your name"
@@ -92,19 +102,19 @@ export default function SignUp() {
               {emailIsAlreadyTaken && (
                 <Alert
                   icon={<IconAlertCircle size="1rem" />}
-                  title="Oh no"
+                  title="Oh no !"
                   color="red"
                   withCloseButton
                   onClose={() => setEmailIsAlreadyTaken(false)}
                 >
-                  A user has already signup to TidyTodo with this e-mail adress
+                  A user has already signup to TidyTodo with this e-mail address
                 </Alert>
               )}
               <SignUpPasswordStrength form={form} />
               <Button fullWidth mt="xl" type="submit">
                 Create account
               </Button>
-            </>
+            </Stack>
           )}
           {userWasCreated && (
             <Alert

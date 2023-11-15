@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppShell, Flex, Loader } from '@mantine/core';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { AppShell, Flex, Loader, Paper } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { AppContext } from '@data/context';
 import { axiosApiInstance } from '@data/api/axiosInstance';
@@ -11,21 +11,24 @@ import { destroyAuthInfo } from '@auth/destroyAuthInfo';
 //Component imports
 import { AppHeader } from '@components/header/Header';
 import { AppNavBar } from '@components/navbar/NavBar';
-import { SearchResultExplorer } from '@components/main/SearchResultExplorer/SearchResultExplorer';
-import { QuickAccessExplorer } from '@components/main/QuickAccessExplorer/QuickAccessExplorer';
-import { FolderExplorer } from '@components/main/FolderExplorer/FolderExplorer';
 import { NoteViewer } from '@components/main/NoteViewer/NoteViewer';
 import { ListViewer } from '@components/main/ListViewer/ListViewer';
-import { UserSettings } from '@components/main/UserSettings/UserSettings';
 import { useMediaQuery } from '@mantine/hooks';
-import { MainBreadCrumbs } from '@components/breadcrumbs/mainBreadCrumbs';
+import { BreadCrumbs } from '@components/breadcrumbs/BreadCrumbs';
 
-export default function Home() {
+export default function HomeLayout({
+  children
+}: {
+  children: React.ReactNode[] | React.ReactNode;
+}) {
   const navigate = useNavigate();
   const [navBarIsOpened, setNavBarIsOpened] = useState(false);
   const { state, dispatch } = useContext(AppContext);
   const queryClient = useQueryClient();
   const displayHeaderBreadCrumbs = useMediaQuery('(min-width: 992px)');
+  const [searchParams] = useSearchParams();
+  const currentList = searchParams.get('list');
+  const currentNote = searchParams.get('note');
 
   //Fetching user info
   useEffect(() => {
@@ -98,21 +101,18 @@ export default function Home() {
           {/* Main content */}
           <Flex direction={{ base: 'column', xl: 'row' }} gap="md" style={{ height: '100%' }}>
             {/* Breadcrumbs */}
-            {!displayHeaderBreadCrumbs && <MainBreadCrumbs />}
+            {!displayHeaderBreadCrumbs && (
+              <Paper shadow="xs" radius="xs" withBorder p="xs" pt="md">
+                <BreadCrumbs />
+              </Paper>
+            )}
 
-            {/* Explorer */}
-            {state.appMode === 'folderNav' && <FolderExplorer />}
-            {state.appMode === 'quickAccessNav' && <QuickAccessExplorer />}
-            {state.appMode === 'searchResults' && <SearchResultExplorer key={state.searchInput} />}
-            {state.appMode === 'userSettings' && <UserSettings />}
+            {/* Children components */}
+            {children}
 
             {/* Element viewer/Editor */}
-            {state.currentElementType === 'note' && state.appMode !== 'userSettings' && (
-              <NoteViewer />
-            )}
-            {state.currentElementType === 'list' && state.appMode !== 'userSettings' && (
-              <ListViewer />
-            )}
+            {currentNote && <NoteViewer />}
+            {currentList && <ListViewer />}
           </Flex>
         </AppShell>
       )}

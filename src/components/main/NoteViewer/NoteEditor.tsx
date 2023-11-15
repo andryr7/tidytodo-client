@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 
 //Rich text editor imports
 import { RichTextEditor, Link } from '@mantine/tiptap';
@@ -23,8 +23,6 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteNote, updateNote } from '@data/api/note';
 import { Note } from '@customTypes/note';
-import { AppContext } from '@data/context';
-import { AppModeActionKind, ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
 import {
   IconArchive,
   IconArchiveOff,
@@ -37,15 +35,18 @@ import {
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCurrentRoute } from '@utils/useCurrentRoute';
 
 export function NoteEditor({ note }: { note: Note }) {
   const queryClient = useQueryClient();
   const [noteIsEditable, setNoteIsEditable] = useState(false);
   const [noteName, setNoteName] = useState(note.name);
+  const navigate = useNavigate();
   const [noteNameIsEditable, setNoteNameIsEditable] = useState(false);
   const [noteColor, setNoteColor] = useState(note.color);
-  // const [noteIsFavorite, setNoteIsFavorite] = useState(note.isFavorite);
-  const { state, dispatch } = useContext(AppContext);
+  const [, setSearchParams] = useSearchParams();
+  const currentRoute = useCurrentRoute();
 
   const resetNoteInputs = () => {
     editor?.commands.setContent(note.content);
@@ -77,13 +78,13 @@ export function NoteEditor({ note }: { note: Note }) {
         queryKey: ['folderContent', note.folderId || 'root']
       });
       //Invalidate note content
-      queryClient.invalidateQueries({ queryKey: ['note', note.id] });
+      queryClient.invalidateQueries({ queryKey: ['note', updatedNote.id] });
       //Invalidate quick access sections data
-      if (updatedNote.isArchive !== note.isArchive || note.isArchive) {
-        queryClient.invalidateQueries(['documents', 'archived']);
-      }
-      if (updatedNote.isFavorite) {
+      if (updatedNote.isFavorite !== note.isFavorite) {
         queryClient.invalidateQueries(['documents', 'favorite']);
+      }
+      if (updatedNote.isArchive !== note.isArchive) {
+        queryClient.invalidateQueries(['documents', 'archived']);
       }
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
     },
@@ -103,15 +104,7 @@ export function NoteEditor({ note }: { note: Note }) {
         queryKey: ['folderContent', note.folderId || 'root']
       });
       queryClient.invalidateQueries(['documents', 'lastUpdated']);
-      //Handling mode change
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: note.folderId ? note.folderId : 'root' }
-      });
+      navigate(`/folders/${note.folderId || 'root'}`);
       notifications.show(
         getElementNotification({
           actionType: 'delete',
@@ -175,11 +168,7 @@ export function NoteEditor({ note }: { note: Note }) {
   };
 
   const handleCloseNote = () => {
-    //Setting the current folder to the clicked one
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
+    setSearchParams({});
   };
 
   const handleDeleteButtonClick = () => {
@@ -187,14 +176,8 @@ export function NoteEditor({ note }: { note: Note }) {
   };
 
   const handleOpenFolderButtonClick = () => {
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'folderNav' }
-    });
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: note.folderId || 'root' }
-    });
+    navigate(`/folders/${note.folderId || 'root'}`);
+    setSearchParams({ note: note.id });
   };
 
   const handleNoteNameEditKeyDown = (e: React.KeyboardEvent) => {
@@ -207,22 +190,15 @@ export function NoteEditor({ note }: { note: Note }) {
       //Updating search results data
       queryClient.invalidateQueries(['documents', 'search']);
       //Closing the opened note and updating it
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
+      // dispatch({
+      //   type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
+      //   payload: { type: null }
+      // });
       updateNoteMutate({ noteId: note.id, newNoteIsArchive: !note.isArchive });
     } else if (note.isArchive) {
       //Updating the note, then opening it in folder navigation mode
       updateNoteMutate({ noteId: note.id, newNoteIsArchive: !note.isArchive });
-      dispatch({
-        type: AppModeActionKind.SET_MODE,
-        payload: { mode: 'folderNav' }
-      });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: note.folderId || 'root' }
-      });
+      navigate(`/folders/${note.folderId || 'root'}`);
     }
   };
 
@@ -291,7 +267,7 @@ export function NoteEditor({ note }: { note: Note }) {
               <IconTrash />
             </ActionIcon>
           </Tooltip>
-          {state.appMode !== 'folderNav' && !note.isArchive && (
+          {!note.isArchive && currentRoute !== 'folders' && (
             <Tooltip label="Open folder" withArrow position="bottom" openDelay={500}>
               <ActionIcon onClick={handleOpenFolderButtonClick}>
                 <IconFolder />

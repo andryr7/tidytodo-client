@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { Center, Loader, Paper, useMantineTheme } from '@mantine/core';
+import { useContext, useEffect } from 'react';
+import { Center, Loader, Paper, Stack, Title, useMantineTheme } from '@mantine/core';
 import { NoteCard } from '../Explorer/NoteCard';
 import { ListCard } from '../Explorer/ListCard';
 import { useQuery } from '@tanstack/react-query';
@@ -9,6 +9,7 @@ import { getSearchedDocuments } from '@data/api/document';
 import { Note } from '@customTypes/note';
 import { List } from '@customTypes/list';
 import { MessageCard } from '../Explorer/MessageCard';
+import { useSearchParams } from 'react-router-dom';
 
 export function SearchResultExplorer() {
   const { state } = useContext(AppContext);
@@ -16,12 +17,21 @@ export function SearchResultExplorer() {
   const {
     status: documentsQueryStatus,
     error: documentsQueryError,
-    data: documents
+    data: documents,
+    refetch
   } = useQuery({
     queryKey: ['documents', 'search'],
     queryFn: () => getSearchedDocuments({ searchInput: state.searchInput })
   });
   const largeDevice = useMediaQuery('(min-width: 1408px)');
+  const [searchParams] = useSearchParams();
+  const documentIsOpened = !!searchParams.get('note') || !!searchParams.get('list');
+  const currentList = searchParams.get('list');
+  const currentNote = searchParams.get('note');
+
+  useEffect(() => {
+    refetch();
+  }, [state.searchInput, refetch]);
 
   if (documentsQueryStatus === 'loading')
     return (
@@ -30,7 +40,7 @@ export function SearchResultExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         <Center style={{ height: '100%' }}>
           <Loader />
@@ -52,7 +62,7 @@ export function SearchResultExplorer() {
     gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr)',
     gridTemplateRows: 'repeat(auto-fill, minmax(150px, 1fr)',
     // justifyItems: 'stretch',
-    gap: mantineTheme.spacing.sm
+    gap: mantineTheme.spacing.xl
   };
 
   const ElementsGrid = () => {
@@ -62,12 +72,15 @@ export function SearchResultExplorer() {
         radius="xs"
         withBorder
         p="lg"
-        style={{ height: '100%', width: state.currentElementType !== null ? '50%' : '100%' }}
+        style={{ height: '100%', width: documentIsOpened ? '50%' : '100%' }}
       >
         {elements.length === 0 ? (
           <MessageCard message={`No note or list has been found with "${state.searchInput}"`} />
         ) : (
-          <div style={gridStyle}>{elements}</div>
+          <Stack>
+            <Title order={2}>Search results for "{state.searchInput}"</Title>
+            <div style={gridStyle}>{elements}</div>
+          </Stack>
         )}
       </Paper>
     );
@@ -76,7 +89,7 @@ export function SearchResultExplorer() {
   return (
     <>
       {largeDevice && <ElementsGrid />}
-      {!largeDevice && state.currentElementType === null && <ElementsGrid />}
+      {!largeDevice && !currentNote && !currentList && <ElementsGrid />}
     </>
   );
 }

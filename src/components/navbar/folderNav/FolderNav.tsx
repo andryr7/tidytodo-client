@@ -1,19 +1,17 @@
-import { useContext } from 'react';
 import { Tree, NodeModel, DropOptions, getDescendants } from '@minoru/react-dnd-treeview';
 import './resetliststyle.css';
 import { Loader, Text, createStyles, rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { FolderNode } from '@components/navbar/folderNav/FolderNode';
-import { AppContext } from '@data/context';
 import { RootNode } from '@components/navbar/folderNav/RootNode';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteFolder, getFolders, updateFolder } from '@data/api/folder';
-import { AppModeActionKind, ElementTypeActionKind, FolderNavActionKind } from '@data/reducer';
 import { ItemTypes } from '@data/dndItemTypes';
 import { updateNote } from '@data/api/note';
 import { updateList } from '@data/api/list';
 import { notifications } from '@mantine/notifications';
 import { getElementNotification } from '@utils/getNotification';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -37,9 +35,10 @@ export function FolderNav() {
     error: foldersQueryError,
     data: folders
   } = useQuery({ queryKey: ['folders'], queryFn: getFolders });
-  const { state, dispatch } = useContext(AppContext);
   const queryClient = useQueryClient();
   const { classes } = useStyles();
+  const navigate = useNavigate();
+  const params = useParams();
 
   //Delete confirmation modal handling
   const openDeleteFolderModal = (id: string | number, text: string) =>
@@ -64,7 +63,7 @@ export function FolderNav() {
       //TODO only invalidate source and destination folder content ?
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({
-        queryKey: ['folderContent', state.currentFolderId]
+        queryKey: ['folderContent', params.folderid]
       });
     }
   });
@@ -76,14 +75,7 @@ export function FolderNav() {
       //TODO Check if all operations are necessary - handling cascading deletion
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({ queryKey: ['folderContent', 'root'] });
-      dispatch({
-        type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-        payload: { type: null }
-      });
-      dispatch({
-        type: FolderNavActionKind.SET_CURRENT_FOLDER,
-        payload: { folderId: 'root' }
-      });
+      navigate(`/folders/${deletedFolder.folderId || 'root'}`);
       notifications.show(
         getElementNotification({
           actionType: 'delete',
@@ -179,40 +171,12 @@ export function FolderNav() {
 
   //Handling folder click
   const handleSelect = (node: NodeModel) => {
-    //Closing the current element (note or list)
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
-    //Setting the app mode to folder navigation
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'folderNav' }
-    });
-    //Setting the current folder to the clicked one
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: node.id }
-    });
+    navigate(`/folders/${node.id}`);
   };
 
   //Handling root folder click
   const handleRootSelect = () => {
-    //Closing the current element (note or list)
-    dispatch({
-      type: ElementTypeActionKind.SET_CURRENT_ELEMENT_TYPE,
-      payload: { type: null }
-    });
-    //Setting the app mode to folder navigation
-    dispatch({
-      type: AppModeActionKind.SET_MODE,
-      payload: { mode: 'folderNav' }
-    });
-    //Setting the current folder to the clicked one
-    dispatch({
-      type: FolderNavActionKind.SET_CURRENT_FOLDER,
-      payload: { folderId: 'root' }
-    });
+    navigate('/folders/root');
   };
 
   if (foldersQueryStatus === 'loading') return <Loader />;
@@ -220,10 +184,7 @@ export function FolderNav() {
 
   return (
     <>
-      <RootNode
-        isSelected={state.appMode === 'folderNav' && state.currentFolderId === 'root'}
-        onSelect={handleRootSelect}
-      />
+      <RootNode isSelected={params.folderid === 'root'} onSelect={handleRootSelect} />
       <Tree
         //TODO Separate tree state in a state variable to implement optimistic updating ?
         tree={folders}
@@ -236,7 +197,7 @@ export function FolderNav() {
             node={node}
             depth={depth}
             isOpen={isOpen}
-            isSelected={state.appMode === 'folderNav' && node.id === state.currentFolderId}
+            isSelected={params.folderid === node.id}
             onToggle={onToggle}
             onSelect={handleSelect}
             onTextChange={handleTextChange}
