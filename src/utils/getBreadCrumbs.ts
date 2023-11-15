@@ -1,29 +1,31 @@
-import { NodeModel } from "@minoru/react-dnd-treeview";
-import { rootNodeFolder } from "@data/rootNodeFolder";
+import { NodeModel } from '@minoru/react-dnd-treeview';
+import { rootNodeFolder } from '@data/rootNodeFolder';
 
-//Defining a function that can build the array representing the folders bread crums
-export function getBreadCrumbsData(folders: NodeModel[], currentFolderId: string | number): NodeModel[] {
-  //If the selected folder is root, just fill the array with the root folder model
-  if(currentFolderId === 'root') {
-    return [rootNodeFolder]
+export function getBreadCrumbsData(
+  folders: NodeModel[],
+  currentFolderId: string | number
+): NodeModel[] {
+  //If the current folder is root, simply return an array containing the root folder model
+  if (currentFolderId === 'root') {
+    return [rootNodeFolder];
   }
 
-  const breadCrumbs = [];
+  //Initiating the loop
+  const breadCrumbs = getPreviousFolder(currentFolderId);
 
-  //If the selected folder is not root, fetch the previous folder and place it in the array
-  getPreviousFolder(currentFolderId);
-
-  //Recursive function that adds the parent folder to the breadcrumbs array and possibly calls itself after
-  function getPreviousFolder(iteratedFolderId: string | number) {
-    const iteratedFolder = folders.find(folder => folder.id === iteratedFolderId)!;
-    breadCrumbs.unshift(iteratedFolder);
-    if(iteratedFolder.parent !== 'root') {
-      getPreviousFolder(iteratedFolder.parent)
+  //Recursive function that finds the previous folder and adds it to a newly created array
+  function getPreviousFolder(iteratedFolderId: string | number): NodeModel[] {
+    //Finding the current folder based on its id
+    const iteratedFolder = folders.find((folder) => folder.id === iteratedFolderId)!;
+    //Creating a new array containing it
+    const result = [iteratedFolder];
+    //Add the previous folder until root folder is reached
+    if (iteratedFolder.parent !== 'root') {
+      return result.concat(getPreviousFolder(iteratedFolder.parent));
     }
+    return result;
   }
 
-  //Add the root folder model to the array
-  breadCrumbs.unshift(rootNodeFolder);
-
-  return breadCrumbs
+  // Add the root folder model to the array
+  return breadCrumbs.concat(rootNodeFolder).reverse();
 }
