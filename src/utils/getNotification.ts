@@ -50,3 +50,12 @@ export function getUserEmailNotification(): NotificationProps {
       'An email has been sent to the provided adress. Please open it to confirm the email change.'
   };
 }
+
+export function getDemoProtectionNotification(): NotificationProps {
+  return {
+    autoClose: 2000,
+    color: 'red',
+    title: 'Demo account',
+    message: 'This is a demo account, it can not be altered or deleted'
+  };
+}
