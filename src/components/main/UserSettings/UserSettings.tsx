@@ -15,7 +15,12 @@ import {
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getUserEmailNotification, getUserNotification } from '@utils/getNotification';
+import {
+  getDemoProtectionNotification,
+  getUserEmailNotification,
+  getUserNotification
+} from '@utils/getNotification';
+import { AxiosError } from 'axios';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -53,7 +58,6 @@ export function UserSettings() {
           newUserPassword: newCredentialInputRef.current!.value,
           currentPassword: currentPasswordInputRef.current!.value
         });
-
         break;
     }
     modals.closeAll();
@@ -65,9 +69,10 @@ export function UserSettings() {
       queryClient.invalidateQueries(['userInfo']);
       notifications.show(getUserNotification());
     },
-    onError: () => {
-      //TODO Add notification of error
-      // console.log(error);
+    onError: (err: AxiosError) => {
+      if (err.response!.status === 472) {
+        notifications.show(getDemoProtectionNotification());
+      }
     }
   });
 
@@ -78,9 +83,10 @@ export function UserSettings() {
       destroyAuthInfo();
       navigate('/signup');
     },
-    onError: () => {
-      //TODO Add notification of error
-      // console.log(error);
+    onError: (err: AxiosError) => {
+      if (err.response!.status === 472) {
+        notifications.show(getDemoProtectionNotification());
+      }
     }
   });
 
@@ -176,23 +182,29 @@ export function UserSettings() {
             <Card.Section p="lg">
               <Stack>
                 <TextInput label="Name" disabled value={userData.name} />
-                <Button onClick={() => openCreationModal('name')}>Change name</Button>
+                <Button onClick={() => openCreationModal('name')} disabled={userData.isDemo}>
+                  Change name
+                </Button>
               </Stack>
             </Card.Section>
             <Card.Section p="lg" withBorder>
               <Stack>
                 <TextInput label="E-mail adress" disabled value={userData.email} />
-                <Button onClick={() => openCreationModal('email')}>Change e-mail adress</Button>
+                <Button onClick={() => openCreationModal('email')} disabled={userData.isDemo}>
+                  Change e-mail adress
+                </Button>
               </Stack>
             </Card.Section>
             <Card.Section p="lg" withBorder>
               <Stack>
-                <Button onClick={() => openCreationModal('password')}>Change password</Button>
+                <Button onClick={() => openCreationModal('password')} disabled={userData.isDemo}>
+                  Change password
+                </Button>
               </Stack>
             </Card.Section>
             <Card.Section p="lg">
               <Stack>
-                <Button onClick={openDeleteAccountModal} color="red">
+                <Button onClick={openDeleteAccountModal} color="red" disabled={userData.isDemo}>
                   Delete account
                 </Button>
               </Stack>
